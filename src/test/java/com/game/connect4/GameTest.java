@@ -7,10 +7,6 @@ import org.junit.jupiter.api.Test;
 
 public class GameTest {
 
-    @Test
-    void newGame() {
-        assertNotNull(new Game(),"Game is null");
-    }
 
     @Test
     void newGameWithPlayers() {
@@ -18,8 +14,8 @@ public class GameTest {
         String player2 = "player2";
         Game game = new Game(player1, player2);
         assertNotNull(game, "Game should initialise with players");
-        assertEquals(player1, game.getPlayer1());
-        assertEquals(player2, game.getPlayer2());
+        assertEquals(player1, game.player1());
+        assertEquals(player2, game.player2());
     }
 
 }

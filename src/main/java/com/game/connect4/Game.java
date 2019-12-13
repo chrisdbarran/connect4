@@ -1,26 +1,17 @@
 package com.game.connect4;
 
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+
+@RequiredArgsConstructor
+@Accessors(fluent = true) @Getter
 public class Game {
 
-    String player1;
+    
+    private final @NonNull String player1;
 
-    String player2;
+    private final @NonNull String player2;
 
-    public Game() {
-        
-    }
-
-    public Game(String player1, String player2)
-    {
-        this.player1 = player1;
-        this.player2 = player2;
-    }
-
-    public String getPlayer1(){
-        return this.player1;
-    }
-
-    public String getPlayer2(){
-        return this.player2;
-    }
 }
