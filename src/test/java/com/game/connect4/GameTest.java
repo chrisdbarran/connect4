@@ -8,7 +8,7 @@ public class GameTest {
 
     @Test
     void loadGame() {
-        assertNotNull(null,"Game is null");
+        assertNotNull(new Game(),"Game is null");
     }
 
 }
