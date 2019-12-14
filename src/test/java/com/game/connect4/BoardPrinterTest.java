@@ -4,9 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 
 import java.io.PrintStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,31 +14,34 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+
 @ExtendWith(MockitoExtension.class)
 @RunWith(JUnitPlatform.class)
 public class BoardPrinterTest extends BaseTest {
 
-    private static String testBoard;
-    private static String formattedBoard;
+
+    private static String renderedBoard;
+    private static String renderedEmptyBoard;
 
     @BeforeAll
     static void setupAll() throws Exception {
-        testBoard = new String(Files.readAllBytes(Paths.get("src/test/resources/testEmptyBoard.txt")));
-        formattedBoard = new String(Files.readAllBytes(Paths.get("src/test/resources/testPrintFormattedBoard.txt")));
+        renderedBoard = loadTestFile("testRenderedBoard.txt");
+        renderedEmptyBoard = loadTestFile("testRenderedEmptyBoard.txt");
+
     }
 
-    @Test
-    void printBoard(@Mock PrintStream out) {
-        BoardPrinter printer = new BoardPrinter(out);
-        printer.printBoard(game.board());
-        verify(out).print(testBoard);
-    }
-
-    @Test
+    @Ignore
     void printFormattedBoard(@Mock PrintStream out ) {
         BoardPrinter printer = new BoardPrinter(out);
         printer.printFormattedBoard(game.board());
-        verify(out).print(formattedBoard);
+        verify(out).print(renderedBoard);
+    }
+
+    @Test
+    void printFormattedEmptyBoard(@Mock PrintStream out ) {
+        BoardPrinter printer = new BoardPrinter(out);
+        printer.printFormattedBoard(game.board());
+        verify(out).print(renderedEmptyBoard);
     }
 
     @Test

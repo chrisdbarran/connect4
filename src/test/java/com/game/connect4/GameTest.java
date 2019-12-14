@@ -1,9 +1,17 @@
 package com.game.connect4;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertLinesMatch;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 
@@ -27,4 +35,18 @@ public class GameTest extends BaseTest {
         Board emptyBoard = new Board();
         assertEquals(emptyBoard, game.board());
     } 
+
+    @Test
+    void saveGameWritesGameToFile() throws Exception {
+        Path saveGame = saveDir.resolve("game.save");
+        
+        List<String> testFile = loadTestFileLines("testSaveGame.save");
+        
+        game.saveGame();
+
+        assertAll(
+            () -> assertTrue("File should exist", Files.exists(saveGame)),
+            () -> assertLinesMatch(testFile, Files.readAllLines(saveGame)));
+
+    }
 }
