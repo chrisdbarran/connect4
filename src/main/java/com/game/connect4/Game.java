@@ -14,9 +14,9 @@ public class Game {
     
     private File saveDir;
 
-    public Game (final File saveDir) {
+    public Game (final File saveDir, final String player1, final String player2) {
         this.saveDir = saveDir;
-        this.gameData = new GameData("player1", "player2");
+        this.gameData = new GameData(player1, player2);
     }
 
     public void saveGame(final String saveGameName) throws IOException {

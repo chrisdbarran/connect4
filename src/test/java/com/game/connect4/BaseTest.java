@@ -15,6 +15,10 @@ public class BaseTest {
 
     private static final String SRC_TEST_RESOURCES = "src/test/resources/";
 
+    private static final String PLAYER1 = "player1";
+
+    private static final String PLAYER2 = "player2";
+
     protected Game game;
 
     @TempDir
@@ -22,7 +26,7 @@ public class BaseTest {
 
     @BeforeEach
     void setup() {
-        game = new Game(saveDir);
+        game = new Game(saveDir, PLAYER1, PLAYER2);
     }
 
     static String loadTestFile(String filename) throws Exception {
