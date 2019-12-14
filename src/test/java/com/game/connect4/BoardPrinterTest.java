@@ -1,5 +1,6 @@
 package com.game.connect4;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 
 import java.io.PrintStream;
@@ -19,10 +20,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class BoardPrinterTest extends BaseTest {
 
     private static String testBoard;
+    private static String formattedBoard;
 
     @BeforeAll
     static void setupAll() throws Exception {
         testBoard = new String(Files.readAllBytes(Paths.get("src/test/resources/testEmptyBoard.txt")));
+        formattedBoard = new String(Files.readAllBytes(Paths.get("src/test/resources/testPrintFormattedBoard.txt")));
     }
 
     @Test
@@ -30,6 +33,19 @@ public class BoardPrinterTest extends BaseTest {
         BoardPrinter printer = new BoardPrinter(out);
         printer.printBoard(game.board());
         verify(out).print(testBoard);
+    }
+
+    @Test
+    void printFormattedBoard(@Mock PrintStream out ) {
+        BoardPrinter printer = new BoardPrinter(out);
+        printer.printFormattedBoard(game.board());
+        verify(out).print(formattedBoard);
+    }
+
+    @Test
+    void generateBoardHeader() {
+       String header =  "|1|2|3|4|5|6|7|\n+-+-+-+-+-+-+-+";
+       assertEquals(header, BoardPrinter.renderHeader());
     }
     
 }
