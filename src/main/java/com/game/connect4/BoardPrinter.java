@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 public class BoardPrinter {
 
-    private static final String COMMA = ",";
     private static final String NEW_LINE = "\n";
     private static final String BOARD_DELIMETER = "|";
     private static final String[] TOKENS = {" ","X","O"};
@@ -17,28 +16,9 @@ public class BoardPrinter {
         this.out = out;
     }
 
-    public void printBoard(Board board) {
-        out.print(BoardPrinter.formatBoard(board));
-    }
 
-    public void printFormattedBoard(Board board) {
-        
+    public void printFormattedBoard(Board board) {    
         out.print(renderBoard(board));
-    }
-
-    public static String formatBoard(Board board) {
-        String [] boardArray = Arrays.stream(board.getBoard())
-                                    .map(BoardPrinter::rowToString)
-                                    .toArray(String[]::new);
-
-        return String.join(NEW_LINE, boardArray);
- }
-
-    public static String rowToString(int[] row) {
-        String[] stringArray =  Arrays.stream(row)
-                    .mapToObj(String::valueOf)
-                    .toArray(String[]::new);
-        return String.join(COMMA, stringArray);
     }
 
     public static String renderHeader() {
@@ -57,12 +37,12 @@ public class BoardPrinter {
         String renderedRow = Arrays.stream(row)
                       .mapToObj(BoardPrinter::renderCell)
                       .collect(Collectors.joining(BOARD_DELIMETER));
+
         return String.join("", BOARD_DELIMETER,renderedRow,BOARD_DELIMETER);
     }
 
     public static String renderCell(int cell) {
         return TOKENS[cell];
     }
-
 
 }

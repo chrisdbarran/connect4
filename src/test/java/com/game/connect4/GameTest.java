@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -21,8 +20,8 @@ public class GameTest extends BaseTest {
     @Test
     void newGameWithPlayers() {
         assertNotNull(game, "Game should initialise with players");
-        assertEquals(PLAYER1, game.player1());
-        assertEquals(PLAYER2, game.player2());
+        assertEquals("player1", game.player1());
+        assertEquals("player2", game.player2());
     }
 
     @Test
@@ -60,20 +59,19 @@ public class GameTest extends BaseTest {
             () -> assertEquals("Stefan",game.player1()),
             () -> assertEquals("Mary", game.player2()),
             () -> assertEquals(2, game.who()),
-            () -> assertTrue(Arrays.deepEquals(testBoard(), game.board().board))
-        );
+            () -> assertEquals(testBoard(), game.board()));
     }
 
 
-    private int[][] testBoard() {
-        return new int[][] {
+    private Board testBoard() {
+        return new Board(new int[][] {
             {0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0},
             {0,0,0,1,0,0,0},
             {0,0,0,2,1,0,0},
             {2,2,1,1,2,1,0}
-        };
+        });
     }
 
 }

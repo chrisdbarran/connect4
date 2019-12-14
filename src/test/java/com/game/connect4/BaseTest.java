@@ -13,10 +13,6 @@ import java.util.List;
 
 public class BaseTest {
 
-    protected static final String PLAYER1 = "player1";
-
-    protected static final String PLAYER2 = "player2";
-
     private static final String SRC_TEST_RESOURCES = "src/test/resources/";
 
     protected Game game;

@@ -10,9 +10,9 @@ public class Game {
 
     private static final String SAVE_GAME_FILENAME = "gameData.json";
 
-    GameData gameData;
+    private GameData gameData;
     
-    File saveDir;
+    private File saveDir;
 
     public Game (final File saveDir) {
         this.saveDir = saveDir;
