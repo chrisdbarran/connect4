@@ -54,9 +54,6 @@ public class GameTest {
 
     @Test
     void newGameStartsWithEmptyBoard() {
-        // Arrays won't match need to use Arrays.equals()
-        // However this doesn't work for arrays of arrays
-        // So use deepEquals
         Board emptyBoard = new Board();
         assertEquals(emptyBoard, game.board());
     }
