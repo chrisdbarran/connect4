@@ -11,18 +11,23 @@ public class BoardPrinter {
         this.out = out;
     }
 
-    public void printBoard(int[][] board) {
-        String [] boardArray = Arrays.stream(board).map(BoardPrinter::rowToString)
-                        .toArray(String[]::new);
-
-        out.print(String.join("\n", boardArray));
+    public void printBoard(Board board) {
+        out.print(BoardPrinter.formatBoard(board));
     }
+
+    public static String formatBoard(Board board) {
+        String [] boardArray = Arrays.stream(board.board())
+                                    .map(BoardPrinter::rowToString)
+                                    .toArray(String[]::new);
+
+        return String.join("\n", boardArray);
+ }
 
     public static String rowToString(int[] row) {
         String[] stringArray =  Arrays.stream(row)
                     .mapToObj(String::valueOf)
                     .toArray(String[]::new);
-
         return String.join(",", stringArray);
     }
+
 }

@@ -2,13 +2,12 @@ package com.game.connect4;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
+
 
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -58,8 +57,8 @@ public class GameTest {
         // Arrays won't match need to use Arrays.equals()
         // However this doesn't work for arrays of arrays
         // So use deepEquals
-        int[][] emptyBoard = new int[6][7];
-        assertTrue(Arrays.deepEquals(emptyBoard, game.board()));
+        Board emptyBoard = new Board();
+        assertEquals(emptyBoard, game.board());
     }
 
     @Test
