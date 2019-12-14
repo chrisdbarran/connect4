@@ -9,6 +9,8 @@ public class BoardPrinter {
     private static final String COMMA = ",";
     private static final String NEW_LINE = "\n";
     private static final String BOARD_DELIMETER = "|";
+    private static final String[] TOKENS = {" ","X","O"};
+
     private PrintStream out;
 
     public BoardPrinter(PrintStream out) {
@@ -59,7 +61,7 @@ public class BoardPrinter {
     }
 
     public static String renderCell(int cell) {
-        return " ";
+        return TOKENS[cell];
     }
 
 

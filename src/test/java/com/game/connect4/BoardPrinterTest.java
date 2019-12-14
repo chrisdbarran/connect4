@@ -5,7 +5,6 @@ import static org.mockito.Mockito.verify;
 
 import java.io.PrintStream;
 
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,9 +29,11 @@ public class BoardPrinterTest extends BaseTest {
 
     }
 
-    @Ignore
-    void printFormattedBoard(@Mock PrintStream out ) {
+    @Test
+    void printFormattedBoard(@Mock PrintStream out ) throws Exception {
         BoardPrinter printer = new BoardPrinter(out);
+        copyTestFileToTempFolder("testLoadGame.json");
+        game.loadGame("testLoadGame.json");
         printer.printFormattedBoard(game.board());
         verify(out).print(renderedBoard);
     }
