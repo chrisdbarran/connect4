@@ -1,60 +1,54 @@
 package com.game.connect4;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-@RequiredArgsConstructor
-@Accessors(fluent = true) @Getter
 public class Game {
 
-    private static final int PLAYER1 = 1;
+    private static final String SAVE_GAME_FILENAME = "gameData.json";
 
-    private final @NonNull String player1;
+    GameData gameData;
+    
+    File saveDir;
 
-    private final @NonNull String player2;
-
-    private @NonNull Path saveDir;
-
-    private int who = PLAYER1;
-
-    private Board board = new Board();
-
-    public void saveGame() throws IOException {
-        Path saveGame = saveDir.resolve("game.save");
-        Files.write(saveGame, renderSaveGame());
+    public Game (final File saveDir) {
+        this.saveDir = saveDir;
+        this.gameData = new GameData("player1", "player2");
     }
 
-    private List<String> renderSaveGame() {
-        List<String> saveGame = new ArrayList<String>();
-
-        saveGame.add(this.player1);
-        saveGame.add(this.player2);
-        saveGame.add(String.valueOf(this.who));
-        
-        List<String> rows = Arrays.stream(board.board())
-                                .map(Game::convertRow)
-                                .collect(Collectors.toList());
-        saveGame.addAll(rows);
-
-        return saveGame;
+    public void saveGame(final String saveGameName) throws IOException {
+        final String filename = Optional.ofNullable(saveGameName).orElse(SAVE_GAME_FILENAME);
+        final File saveGame = new File(saveDir, filename);
+        final ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.writeValue(saveGame, gameData);
     }
 
-    private static String convertRow(int[] row) {
+    public void loadGame(final String saveGameName) throws IOException {
 
-        String[] values = Arrays.stream(row)
-                            .mapToObj(String::valueOf)
-                            .toArray(String[]::new);
+        final String filename = Optional.ofNullable(saveGameName).orElse(SAVE_GAME_FILENAME);
+        final File saveGame = new File(saveDir, filename);
+        final ObjectMapper objectMapper = new ObjectMapper();
+        gameData = objectMapper.readValue(saveGame, GameData.class);
+    }
 
-        return String.join(",", values);
+    public int who() {
+        return gameData.getWho();
+    }
+
+    public Board board() {
+        return gameData.getBoard();
+    }
+    
+    public String player1() {
+        return gameData.getPlayer1();
+    }
+
+    public String player2() {
+        return gameData.getPlayer2();
     }
 }

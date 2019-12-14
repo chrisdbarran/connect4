@@ -25,7 +25,7 @@ public class BoardPrinter {
     }
 
     public static String formatBoard(Board board) {
-        String [] boardArray = Arrays.stream(board.board())
+        String [] boardArray = Arrays.stream(board.getBoard())
                                     .map(BoardPrinter::rowToString)
                                     .toArray(String[]::new);
 
@@ -44,7 +44,7 @@ public class BoardPrinter {
     }
 
     public static String renderBoard(Board board) {
-        String rows = Arrays.stream(board.board())
+        String rows = Arrays.stream(board.getBoard())
                                 .map(BoardPrinter::renderRow)
                                 .collect(Collectors.joining(NEW_LINE));
 

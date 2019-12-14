@@ -3,9 +3,11 @@ package com.game.connect4;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 
@@ -20,11 +22,11 @@ public class BaseTest {
     protected Game game;
 
     @TempDir
-    Path saveDir;
+    static File saveDir;
 
     @BeforeEach
     void setup() {
-        game = new Game(PLAYER1, PLAYER2, saveDir);
+        game = new Game(saveDir);
     }
 
     static String loadTestFile(String filename) throws Exception {
@@ -33,5 +35,12 @@ public class BaseTest {
 
     static List<String> loadTestFileLines(String filename) throws Exception {
         return Files.readAllLines(Paths.get(SRC_TEST_RESOURCES + filename));
+    }
+
+    static void copyTestFileToTempFolder(String filename) throws Exception {
+        final Path original = Paths.get(SRC_TEST_RESOURCES + filename);
+        final File saveGame = new File(saveDir, filename);
+        Path copied = saveGame.toPath();
+        Files.copy(original, copied, StandardCopyOption.REPLACE_EXISTING);
     }
 }
