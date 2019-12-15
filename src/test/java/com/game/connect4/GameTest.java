@@ -59,7 +59,7 @@ public class GameTest extends BaseTest {
             () -> assertEquals("Stefan",game.player1()),
             () -> assertEquals("Mary", game.player2()),
             () -> assertEquals(2, game.who()),
-            () -> assertEquals(testBoard(), game.board()));
+            () -> assertEquals(testBoard().getCells(), game.board().getCells()));
     }
 
 

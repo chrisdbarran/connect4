@@ -17,7 +17,7 @@ public class BoardTest extends BaseTest {
     @Test
     public void emptyBoardAnyMoveIsValid() {
         Board board = new Board();
-        Integer[] sourceArray = {0,1,2,3,4,5,6};
+        Integer[] sourceArray = {1,2,3,4,5,6,7};
         Set<Integer> expectedMoves = new LinkedHashSet<Integer>(Arrays.asList(sourceArray));
         assertEquals(expectedMoves,board.getValidMoves());
     }
