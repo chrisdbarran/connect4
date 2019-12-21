@@ -70,26 +70,46 @@ public class Board {
             cell.state = CellState.valueOfPlayer(player);
     }
 
-    boolean hasWon(int player) {
+    boolean hasWon(int player)
+    {
+        return hasWonByRow(player) || hasWonByColumn(player);
+    }
+
+    boolean hasWonByRow(int player) {
         return cells.stream()
                .filter(c -> c.state.value == player)
                .collect(Collectors.groupingBy(Cell::getRow)).values().stream()
                .filter(rowOfCells -> rowOfCells.size() >= WINNING_RUN)
-               .map(Board::containsWinningLine)
-               .anyMatch((s) -> s.equals(true));
+               .map(Board::containsWinningRow)
+               .anyMatch(s -> s.equals(true));
     }
 
-    static boolean containsWinningLine(List<Cell> cells) {
-        StreamNeighbours<Cell> cellsQueue = new StreamNeighbours<Cell>(WINNING_RUN);
-
-        return cells.stream().map(cell -> cellsQueue.addNext(cell))
-                    .anyMatch(Board::areFourCellsConsecutive);   
+    boolean hasWonByColumn(int player) {
+        return cells.stream()
+                .filter(c -> c.state.value == player)
+                .collect(Collectors.groupingBy(Cell::getColumn)).values().stream()
+                .filter(columnOfCells -> columnOfCells.size() >= WINNING_RUN)
+                .map(Board::containsWinningColumn)
+                .allMatch(s -> s.equals(true));
     }
 
-    static boolean areFourCellsConsecutive(StreamNeighbours<Cell> cellblock) {
+    static boolean containsWinningRow(List<Cell> cells) {
+        StreamNeighbours<Integer> cellsQueue = new StreamNeighbours<Integer>(WINNING_RUN);
+        // Note: if you are testing the row then compare the columns.
+        return cells.stream().map(cell -> cellsQueue.addNext(cell.getColumn()))
+                    .anyMatch(Board::areFourIntegersConsecutive);   
+    }
+
+    static boolean containsWinningColumn(List<Cell> cells) {
+        StreamNeighbours<Integer> cellsQueue = new StreamNeighbours<Integer>(WINNING_RUN);
+        return cells.stream().map(cell -> cellsQueue.addNext(cell.getRow()))
+                    .anyMatch(Board::areFourIntegersConsecutive);
+    }
+
+    static boolean areFourIntegersConsecutive(StreamNeighbours<Integer> cellblock) {
       if(cellblock.areFourElementsRead())
       {
-        return (cellblock.getLast().getColumn() - cellblock.getFirst().getColumn()) + 1 == WINNING_RUN;
+        return (cellblock.getLast() - cellblock.getFirst()) + 1 == WINNING_RUN;
       }
       return false;
     }

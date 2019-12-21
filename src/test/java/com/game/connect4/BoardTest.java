@@ -3,8 +3,10 @@ package com.game.connect4;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.game.connect4.stream.StreamNeighbours;
@@ -45,10 +47,53 @@ public class BoardTest extends BaseTest {
         assertEquals(postMoveBoard(), board);
     }
 
+
+
     @Test
-    public void detectPlayer1HasWonHorizontalLine() throws Exception {
-        Board testBoard = playerOneHorizontalWinBoard();
-        assertTrue(testBoard.hasWon(1));
+    public void testAreConsecutive() {
+        StreamNeighbours<Integer> cellStream = new StreamNeighbours<>(4);
+
+        cellStream.addNext(new Integer(2));
+        cellStream.addNext(new Integer(3));
+        cellStream.addNext(new Integer(4));
+        cellStream.addNext(new Integer(5));
+
+        assertTrue(Board.areFourIntegersConsecutive(cellStream));
+    }
+
+
+    @Test
+    public void testContainsWinningRow() {
+        List<Cell> cells = new ArrayList<>();
+        cells.add(new Cell(1,2,1));
+        cells.add(new Cell(1,3,1));
+        cells.add(new Cell(1,4,1));
+        cells.add(new Cell(1,5,1));
+        cells.add(new Cell(1,7,1));
+        assertTrue(Board.containsWinningRow(cells));
+    }
+
+    @Test
+    public void testContainsWinningColumn() {
+        List<Cell> cells = new ArrayList<>();
+        cells.add(new Cell(2,3,1));
+        cells.add(new Cell(3,3,1));
+        cells.add(new Cell(4,3,1));
+        cells.add(new Cell(5,3,1));
+        cells.add(new Cell(7,3,1));
+        assertTrue(Board.containsWinningColumn(cells));
+    }
+
+    @Test
+    public void testPlayerWonByRow() throws Exception {
+        Board testBoard = playerOneRowWinBoard();
+        assertTrue(testBoard.hasWonByRow(1));
+    }
+
+    @Test
+    public void testPlayerWonByColumn() {
+        Board testBoard = playerOneColumnWinBoard();
+        assertTrue(testBoard.hasWonByColumn(1));
     }
 
     private Board testBoard() {
@@ -73,7 +118,7 @@ public class BoardTest extends BaseTest {
         });
     }
 
-    private Board playerOneHorizontalWinBoard() {
+    private Board playerOneRowWinBoard() {
         return new Board(new int[][] {
             {0,0,0,2,0,0,0},
             {0,0,0,1,0,0,0},
@@ -84,15 +129,15 @@ public class BoardTest extends BaseTest {
         });
     }
 
-    @Test
-    public void testAreConsecutive() {
-        StreamNeighbours<Cell> cellStream = new StreamNeighbours<>(4);
-
-        cellStream.addNext(new Cell(1,2,1));
-        cellStream.addNext(new Cell(1,3,1));
-        cellStream.addNext(new Cell(1,4,1));
-        cellStream.addNext(new Cell(1,5,1));
-
-        assertTrue(Board.areFourCellsConsecutive(cellStream));
+    private Board playerOneColumnWinBoard() {
+        return new Board(new int[][] {
+            {0,0,0,2,0,0,0},
+            {0,0,0,1,0,0,0},
+            {0,0,0,1,0,0,0},
+            {0,0,0,1,0,0,0},
+            {0,1,2,1,1,0,0},
+            {2,1,1,2,2,1,2}
+        });
     }
+
 }
