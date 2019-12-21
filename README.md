@@ -15,6 +15,7 @@ i.e.
 
 Then filter the collection to find all cells where empty cells then filter to find the column numbers.
 
+```
 |1|2|3|4|5|6|7|
 +-+-+-+-+-+-+-+
 | | | | |O| | |
@@ -38,3 +39,4 @@ Then filter the collection to find all cells where empty cells then filter to fi
       (4,4)
 (5,3),     ,(5,5)
       (6,4),     ,(6,6)
+```
