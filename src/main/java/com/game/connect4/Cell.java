@@ -40,7 +40,7 @@ public class Cell {
 
     public String toString()
     {
-        return state.toString();
+       return state.toString();
     }
 
     boolean isInLastColumn(int COLUMNS) {
