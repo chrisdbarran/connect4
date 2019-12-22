@@ -70,7 +70,7 @@ public class BoardTest extends BaseTest {
         cells.add(new Cell(1,4,1));
         cells.add(new Cell(1,5,1));
         cells.add(new Cell(1,7,1));
-        assertTrue(Board.containsWinningRow(cells));
+        assertTrue(Board.groupContainsWinningSequence(cells, Cell::getColumn));
     }
 
     @Test
@@ -81,7 +81,7 @@ public class BoardTest extends BaseTest {
         cells.add(new Cell(4,3,1));
         cells.add(new Cell(5,3,1));
         cells.add(new Cell(7,3,1));
-        assertTrue(Board.containsWinningColumn(cells));
+        assertTrue(Board.groupContainsWinningSequence(cells, Cell::getRow));
     }
 
     @Test

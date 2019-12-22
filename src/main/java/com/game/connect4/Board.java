@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -74,37 +76,39 @@ public class Board {
     {
         return hasWonByRow(player) || hasWonByColumn(player);
     }
+    
+    boolean hasWonByRow(int player)
+    {
+        Map<Integer,List<Cell>> cellMap = groupCellsByPlayer(player, Cell::getRow);
+        return playerHasWinningSequence(cellMap, Cell::getColumn);
+    }
 
-    boolean hasWonByRow(int player) {
+    boolean hasWonByColumn(int player)
+    {
+        Map<Integer,List<Cell>> cellMap = groupCellsByPlayer(player, Cell::getColumn);
+        return playerHasWinningSequence(cellMap, Cell::getRow);
+    }
+
+    Map<Integer,List<Cell>> groupCellsByPlayer(int player, Function<Cell,Integer> groupFunction) {
         return cells.stream()
                .filter(c -> c.state.value == player)
-               .collect(Collectors.groupingBy(Cell::getRow)).values().stream()
-               .filter(rowOfCells -> rowOfCells.size() >= WINNING_RUN)
-               .map(Board::containsWinningRow)
-               .anyMatch(s -> s.equals(true));
+               .collect(Collectors.groupingBy(groupFunction::apply));
     }
 
-    boolean hasWonByColumn(int player) {
-        return cells.stream()
-                .filter(c -> c.state.value == player)
-                .collect(Collectors.groupingBy(Cell::getColumn)).values().stream()
-                .filter(columnOfCells -> columnOfCells.size() >= WINNING_RUN)
-                .map(Board::containsWinningColumn)
-                .allMatch(s -> s.equals(true));
+    boolean playerHasWinningSequence(Map<Integer,List<Cell>> cellMap, Function<Cell, Integer> compareFunction) {
+             return  cellMap.values().stream()
+                    .filter(groupOfCells -> groupOfCells.size() >= WINNING_RUN)
+                    .map(groupOfCells -> Board.groupContainsWinningSequence(groupOfCells, compareFunction))
+                    .anyMatch(s -> s.equals(true));
     }
 
-    static boolean containsWinningRow(List<Cell> cells) {
+    static boolean groupContainsWinningSequence(List<Cell> cells, Function<Cell,Integer> compareFunction) {
         StreamNeighbours<Integer> cellsQueue = new StreamNeighbours<Integer>(WINNING_RUN);
-        // Note: if you are testing the row then compare the columns.
-        return cells.stream().map(cell -> cellsQueue.addNext(cell.getColumn()))
+
+        return cells.stream().map(cell -> cellsQueue.addNext(compareFunction.apply(cell)))
                     .anyMatch(Board::areFourIntegersConsecutive);   
     }
 
-    static boolean containsWinningColumn(List<Cell> cells) {
-        StreamNeighbours<Integer> cellsQueue = new StreamNeighbours<Integer>(WINNING_RUN);
-        return cells.stream().map(cell -> cellsQueue.addNext(cell.getRow()))
-                    .anyMatch(Board::areFourIntegersConsecutive);
-    }
 
     static boolean areFourIntegersConsecutive(StreamNeighbours<Integer> cellblock) {
       if(cellblock.areFourElementsRead())
