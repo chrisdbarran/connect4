@@ -74,7 +74,7 @@ public class Board {
 
     boolean hasWon(int player)
     {
-        return hasWonByRow(player) || hasWonByColumn(player);
+        return hasWonByRow(player) || hasWonByColumn(player) || hasWonByDiagonalNorthEast(player) || hasWonByDiagonalSouthEast(player);
     }
     
     boolean hasWonByRow(int player)

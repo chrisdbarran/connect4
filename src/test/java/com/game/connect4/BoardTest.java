@@ -1,6 +1,7 @@
 package com.game.connect4;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
@@ -129,6 +130,16 @@ public class BoardTest extends BaseTest {
     public void testPlayerWonByDiagonalSourthEast() {
         Board testBoard = playerOneDiagonalWinBoardSE();
         assertTrue(testBoard.hasWonByDiagonalSouthEast(1));
+    }
+
+    @Test
+    public void testHasWon() {
+        assertAll(
+            () -> assertTrue(this.playerOneRowWinBoard().hasWon(1)),
+            () -> assertTrue(this.playerOneColumnWinBoard().hasWon(1)),
+            () -> assertTrue(this.playerOneDiagonalWinBoardNE().hasWon(1)),
+            () -> assertTrue(this.playerOneDiagonalWinBoardSE().hasWon(1))
+        );
     }
 
     private Board testBoard() {
