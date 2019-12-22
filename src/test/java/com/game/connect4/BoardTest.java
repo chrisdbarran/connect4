@@ -47,8 +47,6 @@ public class BoardTest extends BaseTest {
         assertEquals(postMoveBoard(), board);
     }
 
-
-
     @Test
     public void testAreConsecutive() {
         StreamNeighbours<Integer> cellStream = new StreamNeighbours<>(4);
@@ -85,6 +83,31 @@ public class BoardTest extends BaseTest {
     }
 
     @Test
+    public void testContainsWinningDiagonalNorthEast() {
+        List<Cell> cells = new ArrayList<>();
+        cells.add(new Cell(3,5,1));
+        cells.add(new Cell(4,4,1));
+        cells.add(new Cell(5,3,1));
+        cells.add(new Cell(6,2,1));
+
+        boolean winningDiagonal = Board.groupContainsWinningSequence(cells,(Cell cell) -> 7 - cell.getColumn()) && Board.groupContainsWinningSequence(cells, Cell::getRow);
+        assertTrue(winningDiagonal);
+    }
+
+
+    @Test
+    public void testContainsWinningDiagonalSouthEast() {
+        List<Cell> cells = new ArrayList<>();
+        cells.add(new Cell(3,2,1));
+        cells.add(new Cell(4,3,1));
+        cells.add(new Cell(5,4,1));
+        cells.add(new Cell(6,5,1));
+
+        boolean winningDiagonal = Board.groupContainsWinningSequence(cells,Cell::getColumn) && Board.groupContainsWinningSequence(cells, Cell::getRow);
+        assertTrue(winningDiagonal);
+    }
+
+    @Test
     public void testPlayerWonByRow() throws Exception {
         Board testBoard = playerOneRowWinBoard();
         assertTrue(testBoard.hasWonByRow(1));
@@ -94,6 +117,18 @@ public class BoardTest extends BaseTest {
     public void testPlayerWonByColumn() {
         Board testBoard = playerOneColumnWinBoard();
         assertTrue(testBoard.hasWonByColumn(1));
+    }
+
+    @Test
+    public void testPlayerWonByDiagonalNorthEast() {
+        Board testBoard = playerOneDiagonalWinBoardNE();
+        assertTrue(testBoard.hasWonByDiagonalNorthEast(1));
+    }
+
+    @Test
+    public void testPlayerWonByDiagonalSourthEast() {
+        Board testBoard = playerOneDiagonalWinBoardSE();
+        assertTrue(testBoard.hasWonByDiagonalSouthEast(1));
     }
 
     private Board testBoard() {
@@ -136,6 +171,28 @@ public class BoardTest extends BaseTest {
             {0,0,0,1,0,0,0},
             {0,0,0,1,0,0,0},
             {0,1,2,1,1,0,0},
+            {2,1,1,2,2,1,2}
+        });
+    }
+
+    private Board playerOneDiagonalWinBoardNE() {
+        return new Board(new int[][] {
+            {0,0,0,2,0,0,0},
+            {0,0,0,1,0,0,0},
+            {0,0,0,1,1,0,0},
+            {0,0,0,1,2,0,0},
+            {0,1,1,2,1,0,0},
+            {2,1,1,2,2,1,2}
+        });
+    }
+
+    private Board playerOneDiagonalWinBoardSE() {
+        return new Board(new int[][] {
+            {0,0,0,2,0,0,0},
+            {0,0,0,1,0,0,0},
+            {0,0,1,1,1,0,0},
+            {0,0,2,1,2,0,0},
+            {0,1,2,2,1,0,0},
             {2,1,1,2,2,1,2}
         });
     }

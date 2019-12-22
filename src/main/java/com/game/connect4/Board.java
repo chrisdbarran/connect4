@@ -89,10 +89,25 @@ public class Board {
         return playerHasWinningSequence(cellMap, Cell::getRow);
     }
 
+    boolean hasWonByDiagonalNorthEast(int player)
+    {
+        Map<Integer,List<Cell>> cellMap = groupCellsByPlayer(player, (Cell cell) -> cell.getRow() + cell.getColumn());
+        return playerHasWinningSequence(cellMap, Cell::getRow) && playerHasWinningSequence(cellMap, (Cell cell) -> 7 - cell.getColumn());
+    }
+
+    boolean hasWonByDiagonalSouthEast(int player)
+    {
+        Map<Integer,List<Cell>> cellMap = groupCellsByPlayer(player, (Cell cell) -> cell.getRow() - cell.getColumn());
+        return playerHasWinningSequence(cellMap, Cell::getRow) && playerHasWinningSequence(cellMap, Cell::getColumn);
+    }
+
     Map<Integer,List<Cell>> groupCellsByPlayer(int player, Function<Cell,Integer> groupFunction) {
-        return cells.stream()
+        
+    
+        Map<Integer,List<Cell>> cellMap = cells.stream()
                .filter(c -> c.state.value == player)
                .collect(Collectors.groupingBy(groupFunction::apply));
+        return cellMap;
     }
 
     boolean playerHasWinningSequence(Map<Integer,List<Cell>> cellMap, Function<Cell, Integer> compareFunction) {
