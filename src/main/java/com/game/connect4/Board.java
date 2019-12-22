@@ -92,7 +92,7 @@ public class Board {
     boolean hasWonByDiagonalNorthEast(int player)
     {
         Map<Integer,List<Cell>> cellMap = groupCellsByPlayer(player, (Cell cell) -> cell.getRow() + cell.getColumn());
-        return playerHasWinningSequence(cellMap, Cell::getRow) && playerHasWinningSequence(cellMap, (Cell cell) -> 7 - cell.getColumn());
+        return playerHasWinningSequence(cellMap, Cell::getRow) && playerHasWinningSequence(cellMap, (Cell cell) -> COLUMNS - cell.getColumn());
     }
 
     boolean hasWonByDiagonalSouthEast(int player)
