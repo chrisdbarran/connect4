@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class Cell {
+public class Cell  {
 
     private final int column;
     private final int row;
@@ -35,6 +35,12 @@ public class Cell {
         this.state = CellState.valueOfPlayer(state);
     }
 
+    public Cell(Cell original) {
+        this.row = original.getRow();
+        this.column = original.getColumn();
+        this.state = original.getState();
+    }
+
     boolean isEmpty()
     {
         return state == CellState.EMPTY;
@@ -48,4 +54,5 @@ public class Cell {
     boolean isInLastColumn(int COLUMNS) {
         return COLUMNS == this.column;
     }
+
 }

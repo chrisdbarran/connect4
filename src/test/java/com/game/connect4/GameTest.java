@@ -1,6 +1,7 @@
 package com.game.connect4;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+//import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertLinesMatch;
@@ -44,7 +45,7 @@ public class GameTest extends BaseTest {
         
         game.saveGame(null);
         assertAll(
-            () -> assertTrue("File should exist", saveGame.exists()),
+            () -> assertTrue(saveGame.exists()),
             () -> assertLinesMatch(testFile, Files.readAllLines(saveGame.toPath())));
     }
 
@@ -81,6 +82,13 @@ public class GameTest extends BaseTest {
         assertEquals(3, game.suggestMove(game.player1()));
     }
 
+    @Test
+    public void suggestMoveBlockPlayerTwoWin()
+    {
+        Game game = setupGame(playerTwoWinNextMove());
+        assertEquals(2, game.suggestMove(game.player1()));
+    }
+
     private Board playerOneWinNextMove() {
         return new Board(new int[][] {
             {0,0,0,2,0,0,0},
@@ -90,6 +98,29 @@ public class GameTest extends BaseTest {
             {0,1,2,2,1,0,0},
             {2,1,1,2,2,1,2}
         });
+    }
+
+    private Board playerTwoWinNextMove() {
+        return new Board(new int[][] {
+            {0,0,0,2,0,0,0},
+            {0,0,0,1,0,0,0},
+            {0,0,0,1,1,0,0},
+            {0,2,2,1,2,0,0},
+            {0,1,2,2,1,0,0},
+            {2,1,1,1,2,2,2}
+        });
+    }
+
+
+    @Test
+    public void testGetOpponent() {
+        Player player1 = game.player1();
+        Player player2 = game.player2();
+
+        assertAll(
+            () -> assertEquals(player2, game.getOpponent(player1)),
+            () -> assertEquals(player1, game.getOpponent(player2))
+        );
     }
 
 }

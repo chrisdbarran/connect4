@@ -1,14 +1,15 @@
 package com.game.connect4;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.Queue;
 
 import com.game.connect4.stream.StreamNeighbours;
 
@@ -23,7 +24,7 @@ public class BoardTest extends BaseTest {
     public void emptyBoardAnyMoveIsValid() {
         Board board = new Board();
         Integer[] sourceArray = {1,2,3,4,5,6,7};
-        Set<Integer> expectedMoves = new LinkedHashSet<Integer>(Arrays.asList(sourceArray));
+        Queue<Integer> expectedMoves = new LinkedList<Integer>(Arrays.asList(sourceArray));
         assertEquals(expectedMoves,board.getValidMoves());
     }
 
@@ -37,7 +38,7 @@ public class BoardTest extends BaseTest {
     @Test
     public void fullColumnShouldNotBeValidMove() throws Exception {
         Integer[] sourceArray = {1,2,3,5,6,7};
-        Set<Integer> expectedMoves = new LinkedHashSet<Integer>(Arrays.asList(sourceArray));
+        Queue<Integer> expectedMoves = new LinkedList<Integer>(Arrays.asList(sourceArray));
         assertEquals(expectedMoves, testBoard().getValidMoves());
     }
 
@@ -142,6 +143,23 @@ public class BoardTest extends BaseTest {
         );
     }
 
+    @Test
+    public void testModifyCopyDoesntModifyOriginalBoard() {
+        Board testBoard = playerTwoWinNextMove();
+        Board copyOfBoard = new Board(testBoard);
+        copyOfBoard.makeMove(3, game.player1());
+        assertFalse(testBoard.equals(copyOfBoard));
+    }
+
+    @Test
+    public void testOpponentWinNextMove() {
+        Board testBoard = playerTwoWinNextMove();
+        Queue<Integer> winningMoves = new LinkedList<>();
+        winningMoves.add(2);
+        assertEquals(winningMoves, testBoard.playerCanWinNextMove(game.player2()));
+    }
+
+
     private Board testBoard() {
         return new Board(new int[][] {
             {0,0,0,2,0,0,0},
@@ -206,5 +224,20 @@ public class BoardTest extends BaseTest {
             {0,1,2,2,1,0,0},
             {2,1,1,2,2,1,2}
         });
+    }
+
+    private Board playerTwoWinNextMove() {
+        return new Board(new int[][] {
+            {0,0,0,2,0,0,0},
+            {0,0,0,1,0,0,0},
+            {0,0,0,1,1,0,0},
+            {0,2,2,1,2,0,0},
+            {0,1,2,2,1,0,0},
+            {2,1,1,1,2,2,2}
+        });
+    }
+
+    public static void printBoard(Board board) {
+        System.out.println(BoardPrinter.renderBoard(board));
     }
 }

@@ -16,10 +16,13 @@ import com.game.connect4.stream.StreamNeighbours;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @EqualsAndHashCode
-public class Board {
+
+public class Board  {
 
     static final int ROWS = 6;
 
@@ -38,9 +41,9 @@ public class Board {
                     .forEach(c -> cells.add(new Cell(r,c)))); 
     }
 
-    public Board(List<Cell> board)
+    public Board(List<Cell> cells)
     {
-        this.cells = board;
+        this.cells = cells;
     }
 
     public Board(int[][] boardAsArray)
@@ -52,8 +55,18 @@ public class Board {
                             .forEach(c -> cells.add(new Cell(r,c,boardAsArray[r-1][c-1]))));
     }
 
+    public Board(Board original) {
+        // Deep Copy of board
+        List<Cell> cells = new ArrayList<Cell>();
+        for(Cell cell : original.getCells())
+        {
+            cells.add(new Cell(cell));
+        }
+        this.cells = cells;
+    }
 
-    Set<Integer> getValidMoves() {
+
+    Queue<Integer> getValidMoves() {
        
         Set<Integer> validMoves = new LinkedHashSet<Integer>();
 
@@ -62,7 +75,7 @@ public class Board {
                 .peek(s -> validMoves.add(s.getColumn()))
                 .count(); // Terminal Operation.
 
-        return validMoves;
+        return new LinkedList<Integer>(validMoves);
     }
 
     void makeMove(int column, Player player) {
@@ -144,13 +157,11 @@ public class Board {
     }
 
     private boolean winningMove(Player player, int move) {
-        Board futureBoard = copyOfBoard();
+        Board futureBoard = new Board(this);
         futureBoard.makeMove(move, player);
+        System.out.println("Move: " + move + " Board: " + BoardPrinter.renderBoard(futureBoard));
         return futureBoard.hasWon(player);
     }
 
-    public Board copyOfBoard() 
-    {
-        return new Board(new ArrayList<Cell>(this.getCells()));
-    }
+
 }

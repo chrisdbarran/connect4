@@ -52,13 +52,29 @@ public class Game {
     }
 
     public Integer suggestMove(Player player) {
-       
         Queue<Integer> winningMoves = gameData.getBoard().playerCanWinNextMove(player);
 
         if(!winningMoves.isEmpty()) {
+            System.out.println("Player : " + player.getPlayerId() + " Wins : " + BoardPrinter.renderBoard(gameData.getBoard()));
             return winningMoves.element();
         }
-        
-        return new Integer(-1);
+
+        // If no winning moves for player 1 look to block winning move for player 2
+        Queue<Integer> winningMovesOpponent = gameData.getBoard().playerCanWinNextMove(getOpponent(player));
+        if(!winningMovesOpponent.isEmpty()) {
+            System.out.println("Player : " + player.getPlayerId() + " Blocked : " + BoardPrinter.renderBoard(gameData.getBoard()));
+            return winningMovesOpponent.element();
+        }
+        // Otherwise just return a valid move
+        return gameData.board.getValidMoves().element();
+    }
+
+    public Player getOpponent(Player player)
+    {
+        if(player.isPlayer1())
+        {
+            return gameData.getPlayer2();
+        }
+        return gameData.getPlayer1();
     }
 }
