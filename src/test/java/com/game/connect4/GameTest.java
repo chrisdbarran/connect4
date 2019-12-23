@@ -27,7 +27,7 @@ public class GameTest extends BaseTest {
 
     @Test
     void newGameStartsWithPlayer1() {
-        assertEquals(1,game.who(), "Game should start with player1");
+        assertEquals(game.player1(),game.who(), "Game should start with player1");
     }
 
     @Test
@@ -59,7 +59,7 @@ public class GameTest extends BaseTest {
         assertAll(
             () -> assertEquals("Stefan",game.player1().getName()),
             () -> assertEquals("Mary", game.player2().getName()),
-            () -> assertEquals(2, game.who()),
+            () -> assertEquals(game.player2().getPlayerId(), game.who().getPlayerId()),
             () -> assertEquals(testBoard().getCells(), game.board().getCells()));
     }
 

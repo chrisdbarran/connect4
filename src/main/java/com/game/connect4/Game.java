@@ -35,8 +35,12 @@ public class Game {
         gameData = objectMapper.readValue(saveGame, GameData.class);
     }
 
-    public int who() {
+    public Player who() {
         return gameData.getWho();
+    }
+
+    public void who(Player player) {
+        gameData.setWho(player);
     }
 
     public Board board() {
@@ -51,30 +55,35 @@ public class Game {
         return gameData.getPlayer2();
     }
 
+    public boolean hasValidMoves() {
+        return board().getValidMoves().size() > 0;
+    }
+
     public Integer suggestMove(Player player) {
-        Queue<Integer> winningMoves = gameData.getBoard().playerCanWinNextMove(player);
+        Queue<Integer> winningMoves = board().playerCanWinNextMove(player);
 
         if(!winningMoves.isEmpty()) {
-            System.out.println("Player : " + player.getPlayerId() + " Wins : " + BoardPrinter.renderBoard(gameData.getBoard()));
+            System.out.println("Player : " + player.getPlayerId() + " Wins : " + BoardPrinter.renderBoard(board()));
             return winningMoves.element();
         }
 
         // If no winning moves for player 1 look to block winning move for player 2
-        Queue<Integer> winningMovesOpponent = gameData.getBoard().playerCanWinNextMove(getOpponent(player));
+        Queue<Integer> winningMovesOpponent = board().playerCanWinNextMove(getOpponent(player));
         if(!winningMovesOpponent.isEmpty()) {
-            System.out.println("Player : " + player.getPlayerId() + " Blocked : " + BoardPrinter.renderBoard(gameData.getBoard()));
+            System.out.println("Player : " + player.getPlayerId() + " Blocked : " + BoardPrinter.renderBoard(board()));
             return winningMovesOpponent.element();
         }
         // Otherwise just return a valid move
-        return gameData.board.getValidMoves().element();
+        return board().getValidMoves().element();
     }
 
     public Player getOpponent(Player player)
     {
         if(player.isPlayer1())
         {
-            return gameData.getPlayer2();
+            return player2();
         }
-        return gameData.getPlayer1();
+        return player1();
     }
+
 }
