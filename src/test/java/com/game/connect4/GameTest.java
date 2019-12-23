@@ -74,4 +74,22 @@ public class GameTest extends BaseTest {
         });
     }
 
+    @Test
+    public void suggestMovePlayerOneWin()
+    {
+        Game game = setupGame(playerOneWinNextMove());
+        assertEquals(3, game.suggestMove(1));
+    }
+
+    private Board playerOneWinNextMove() {
+        return new Board(new int[][] {
+            {0,0,0,2,0,0,0},
+            {0,0,0,1,0,0,0},
+            {0,0,0,1,1,0,0},
+            {0,0,2,1,2,0,0},
+            {0,1,2,2,1,0,0},
+            {2,1,1,2,2,1,2}
+        });
+    }
+
 }

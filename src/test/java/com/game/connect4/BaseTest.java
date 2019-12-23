@@ -26,7 +26,13 @@ public class BaseTest {
 
     @BeforeEach
     void setup() {
-        game = new Game(saveDir, PLAYER1, PLAYER2);
+        GameData gameData = new GameData(PLAYER1, PLAYER2, new Board());
+        game = new Game(saveDir, gameData);
+    }
+
+    static Game setupGame(Board board) {
+        GameData gameData = new GameData(PLAYER1, PLAYER2, board);
+        return new Game(saveDir, gameData);
     }
 
     static String loadTestFile(String filename) throws Exception {

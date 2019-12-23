@@ -3,6 +3,7 @@ package com.game.connect4;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -14,9 +15,10 @@ public class Game {
     
     private File saveDir;
 
-    public Game (final File saveDir, final String player1, final String player2) {
+    public Game(final File saveDir, GameData gameData)
+    {
         this.saveDir = saveDir;
-        this.gameData = new GameData(player1, player2);
+        this.gameData = gameData;
     }
 
     public void saveGame(final String saveGameName) throws IOException {
@@ -48,5 +50,20 @@ public class Game {
 
     public String player2() {
         return gameData.getPlayer2();
+    }
+
+    public int suggestMove(int player) {
+        Set<Integer> validMoves = gameData.getBoard().getValidMoves();
+
+        for(int move : validMoves)
+        {
+            Board futureBoard = gameData.copyOfBoard();
+            futureBoard.makeMove(move, player);
+            if(futureBoard.hasWon(player))
+            {
+                return move;
+            }
+        }
+        return -1;
     }
 }

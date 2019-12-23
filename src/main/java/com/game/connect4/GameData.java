@@ -1,12 +1,12 @@
 package com.game.connect4;
 
+import java.util.ArrayList;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Getter
 public class GameData {
 
@@ -18,6 +18,17 @@ public class GameData {
 
     int who = PLAYER1;
 
-    Board board = new Board();
+    @NonNull Board board = new Board();
 
+    public GameData(String player1, String player2, Board board)
+    {
+        this.player1 = player1;
+        this.player2 = player2;
+        this.board = board;
+    }
+
+    public Board copyOfBoard() 
+    {
+        return new Board(new ArrayList<Cell>(board.getCells()));
+    }
 }

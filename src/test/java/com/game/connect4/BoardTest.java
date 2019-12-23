@@ -207,5 +207,4 @@ public class BoardTest extends BaseTest {
             {2,1,1,2,2,1,2}
         });
     }
-
 }
