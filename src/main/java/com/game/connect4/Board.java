@@ -3,8 +3,10 @@ package com.game.connect4;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -132,5 +134,23 @@ public class Board {
       }
       return false;
     }
-        
+    
+    public Queue<Integer> playerCanWinNextMove(int player)
+    {   
+        return getValidMoves().stream()
+            .filter(move -> winningMove(player, move))
+            .collect(Collectors.toCollection(LinkedList::new));
+
+    }
+
+    private boolean winningMove(int player, int move) {
+        Board futureBoard = copyOfBoard();
+        futureBoard.makeMove(move, player);
+        return futureBoard.hasWon(player);
+    }
+
+    public Board copyOfBoard() 
+    {
+        return new Board(new ArrayList<Cell>(this.getCells()));
+    }
 }

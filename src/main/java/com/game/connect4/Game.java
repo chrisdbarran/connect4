@@ -3,8 +3,7 @@ package com.game.connect4;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.Set;
-
+import java.util.Queue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Game {
@@ -52,18 +51,14 @@ public class Game {
         return gameData.getPlayer2();
     }
 
-    public int suggestMove(int player) {
-        Set<Integer> validMoves = gameData.getBoard().getValidMoves();
+    public Integer suggestMove(int player) {
+       
+        Queue<Integer> winningMoves = gameData.getBoard().playerCanWinNextMove(player);
 
-        for(int move : validMoves)
-        {
-            Board futureBoard = gameData.copyOfBoard();
-            futureBoard.makeMove(move, player);
-            if(futureBoard.hasWon(player))
-            {
-                return move;
-            }
+        if(!winningMoves.isEmpty()) {
+            return winningMoves.element();
         }
-        return -1;
+        
+        return new Integer(-1);
     }
 }

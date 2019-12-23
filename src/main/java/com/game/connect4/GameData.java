@@ -1,7 +1,5 @@
 package com.game.connect4;
 
-import java.util.ArrayList;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -27,8 +25,4 @@ public class GameData {
         this.board = board;
     }
 
-    public Board copyOfBoard() 
-    {
-        return new Board(new ArrayList<Cell>(board.getCells()));
-    }
 }
