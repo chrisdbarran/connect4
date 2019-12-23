@@ -43,11 +43,11 @@ public class Game {
         return gameData.getBoard();
     }
     
-    public String player1() {
+    public Player player1() {
         return gameData.getPlayer1();
     }
 
-    public String player2() {
+    public Player player2() {
         return gameData.getPlayer2();
     }
 

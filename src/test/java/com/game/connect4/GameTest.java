@@ -20,8 +20,8 @@ public class GameTest extends BaseTest {
     @Test
     void newGameWithPlayers() {
         assertNotNull(game, "Game should initialise with players");
-        assertEquals("player1", game.player1());
-        assertEquals("player2", game.player2());
+        assertEquals("player1", game.player1().getName());
+        assertEquals("player2", game.player2().getName());
     }
 
     @Test
@@ -56,8 +56,8 @@ public class GameTest extends BaseTest {
         game.loadGame("testLoadGame.json");
         
         assertAll(
-            () -> assertEquals("Stefan",game.player1()),
-            () -> assertEquals("Mary", game.player2()),
+            () -> assertEquals("Stefan",game.player1().getName()),
+            () -> assertEquals("Mary", game.player2().getName()),
             () -> assertEquals(2, game.who()),
             () -> assertEquals(testBoard().getCells(), game.board().getCells()));
     }

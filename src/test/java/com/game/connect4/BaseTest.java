@@ -15,9 +15,9 @@ public class BaseTest {
 
     private static final String SRC_TEST_RESOURCES = "src/test/resources/";
 
-    private static final String PLAYER1 = "player1";
+    private static final Player PLAYER1 = Player.player1("player1");
 
-    private static final String PLAYER2 = "player2";
+    private static final Player PLAYER2 = Player.player2("player2");
 
     protected Game game;
 
