@@ -78,7 +78,7 @@ public class GameTest extends BaseTest {
     public void suggestMovePlayerOneWin()
     {
         Game game = setupGame(playerOneWinNextMove());
-        assertEquals(3, game.suggestMove(1));
+        assertEquals(3, game.suggestMove(game.player1()));
     }
 
     private Board playerOneWinNextMove() {

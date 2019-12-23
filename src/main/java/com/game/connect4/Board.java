@@ -59,55 +59,55 @@ public class Board {
 
         cells.stream()
                 .filter(s -> s.isEmpty())
-                .peek(s -> validMoves.add(s.column))
+                .peek(s -> validMoves.add(s.getColumn()))
                 .count(); // Terminal Operation.
 
         return validMoves;
     }
 
-    void makeMove(int column, int player) {
+    void makeMove(int column, Player player) {
         Cell cell  = cells.stream()
-                            .filter(c -> c.column == column)
+                            .filter(c -> c.getColumn() == column)
                             .filter(c -> c.isEmpty())
                             .max(Comparator.comparing(Cell::getRow))
                             .get();
-            cell.state = CellState.valueOfPlayer(player);
+            cell.setState(player.getPlayerId());
     }
 
-    boolean hasWon(int player)
+    boolean hasWon(Player player)
     {
         return hasWonByRow(player) || hasWonByColumn(player) || hasWonByDiagonalNorthEast(player) || hasWonByDiagonalSouthEast(player);
     }
     
-    boolean hasWonByRow(int player)
+    boolean hasWonByRow(Player player)
     {
         Map<Integer,List<Cell>> cellMap = groupCellsByPlayer(player, Cell::getRow);
         return playerHasWinningSequence(cellMap, Cell::getColumn);
     }
 
-    boolean hasWonByColumn(int player)
+    boolean hasWonByColumn(Player player)
     {
         Map<Integer,List<Cell>> cellMap = groupCellsByPlayer(player, Cell::getColumn);
         return playerHasWinningSequence(cellMap, Cell::getRow);
     }
 
-    boolean hasWonByDiagonalNorthEast(int player)
+    boolean hasWonByDiagonalNorthEast(Player player)
     {
         Map<Integer,List<Cell>> cellMap = groupCellsByPlayer(player, (Cell cell) -> cell.getRow() + cell.getColumn());
         return playerHasWinningSequence(cellMap, Cell::getRow) && playerHasWinningSequence(cellMap, (Cell cell) -> COLUMNS - cell.getColumn());
     }
 
-    boolean hasWonByDiagonalSouthEast(int player)
+    boolean hasWonByDiagonalSouthEast(Player player)
     {
         Map<Integer,List<Cell>> cellMap = groupCellsByPlayer(player, (Cell cell) -> cell.getRow() - cell.getColumn());
         return playerHasWinningSequence(cellMap, Cell::getRow) && playerHasWinningSequence(cellMap, Cell::getColumn);
     }
 
-    Map<Integer,List<Cell>> groupCellsByPlayer(int player, Function<Cell,Integer> groupFunction) {
+    Map<Integer,List<Cell>> groupCellsByPlayer(Player player, Function<Cell,Integer> groupFunction) {
         
     
         Map<Integer,List<Cell>> cellMap = cells.stream()
-               .filter(c -> c.state.value == player)
+               .filter(c -> c.getState().equals(player.getPlayerId()))
                .collect(Collectors.groupingBy(groupFunction::apply));
         return cellMap;
     }
@@ -135,7 +135,7 @@ public class Board {
       return false;
     }
     
-    public Queue<Integer> playerCanWinNextMove(int player)
+    public Queue<Integer> playerCanWinNextMove(Player player)
     {   
         return getValidMoves().stream()
             .filter(move -> winningMove(player, move))
@@ -143,7 +143,7 @@ public class Board {
 
     }
 
-    private boolean winningMove(int player, int move) {
+    private boolean winningMove(Player player, int move) {
         Board futureBoard = copyOfBoard();
         futureBoard.makeMove(move, player);
         return futureBoard.hasWon(player);

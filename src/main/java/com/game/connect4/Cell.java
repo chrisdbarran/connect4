@@ -7,15 +7,17 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 
 @JsonPropertyOrder({"column","row","state"})
 @Getter
+@Setter
 @EqualsAndHashCode
 public class Cell {
 
-    final int column;
-    final int row;
-    @NonNull CellState state = CellState.EMPTY;
+    private final int column;
+    private final int row;
+    private @NonNull CellState state = CellState.EMPTY;
 
 
 

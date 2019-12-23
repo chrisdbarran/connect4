@@ -51,7 +51,7 @@ public class Game {
         return gameData.getPlayer2();
     }
 
-    public Integer suggestMove(int player) {
+    public Integer suggestMove(Player player) {
        
         Queue<Integer> winningMoves = gameData.getBoard().playerCanWinNextMove(player);
 

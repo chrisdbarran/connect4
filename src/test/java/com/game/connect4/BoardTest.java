@@ -44,7 +44,7 @@ public class BoardTest extends BaseTest {
     @Test
     public void makeMoveShouldUpdateBoard() throws Exception {
         Board board = testBoard();
-        board.makeMove(7, 2);
+        board.makeMove(7, game.player2());
         assertEquals(postMoveBoard(), board);
     }
 
@@ -111,34 +111,34 @@ public class BoardTest extends BaseTest {
     @Test
     public void testPlayerWonByRow() throws Exception {
         Board testBoard = playerOneRowWinBoard();
-        assertTrue(testBoard.hasWonByRow(1));
+        assertTrue(testBoard.hasWonByRow(game.player1()));
     }
 
     @Test
     public void testPlayerWonByColumn() {
         Board testBoard = playerOneColumnWinBoard();
-        assertTrue(testBoard.hasWonByColumn(1));
+        assertTrue(testBoard.hasWonByColumn(game.player1()));
     }
 
     @Test
     public void testPlayerWonByDiagonalNorthEast() {
         Board testBoard = playerOneDiagonalWinBoardNE();
-        assertTrue(testBoard.hasWonByDiagonalNorthEast(1));
+        assertTrue(testBoard.hasWonByDiagonalNorthEast(game.player1()));
     }
 
     @Test
     public void testPlayerWonByDiagonalSourthEast() {
         Board testBoard = playerOneDiagonalWinBoardSE();
-        assertTrue(testBoard.hasWonByDiagonalSouthEast(1));
+        assertTrue(testBoard.hasWonByDiagonalSouthEast(game.player1()));
     }
 
     @Test
     public void testHasWon() {
         assertAll(
-            () -> assertTrue(this.playerOneRowWinBoard().hasWon(1)),
-            () -> assertTrue(this.playerOneColumnWinBoard().hasWon(1)),
-            () -> assertTrue(this.playerOneDiagonalWinBoardNE().hasWon(1)),
-            () -> assertTrue(this.playerOneDiagonalWinBoardSE().hasWon(1))
+            () -> assertTrue(this.playerOneRowWinBoard().hasWon(game.player1())),
+            () -> assertTrue(this.playerOneColumnWinBoard().hasWon(game.player1())),
+            () -> assertTrue(this.playerOneDiagonalWinBoardNE().hasWon(game.player1())),
+            () -> assertTrue(this.playerOneDiagonalWinBoardSE().hasWon(game.player1()))
         );
     }
 
