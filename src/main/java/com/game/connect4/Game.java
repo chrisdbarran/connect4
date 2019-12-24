@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.Random;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Game {
@@ -63,18 +65,24 @@ public class Game {
         Queue<Integer> winningMoves = board().playerCanWinNextMove(player);
 
         if(!winningMoves.isEmpty()) {
-            System.out.println("Player : " + player.getPlayerId() + " Wins : " + BoardPrinter.renderBoard(board()));
             return winningMoves.element();
         }
 
         // If no winning moves for player 1 look to block winning move for player 2
         Queue<Integer> winningMovesOpponent = board().playerCanWinNextMove(getOpponent(player));
         if(!winningMovesOpponent.isEmpty()) {
-            System.out.println("Player : " + player.getPlayerId() + " Blocked : " + BoardPrinter.renderBoard(board()));
             return winningMovesOpponent.element();
         }
         // Otherwise just return a valid move
-        return board().getValidMoves().element();
+        return randomValidMove(board().getValidMoves());
+    }
+
+    public Integer randomValidMove(Queue<Integer> validMoves) {
+        Integer[] moves = new Integer[validMoves.size()];
+        moves = validMoves.toArray(moves);
+        Random random = new Random();
+        int choice = random.nextInt(moves.length - 1);
+        return moves[choice];
     }
 
     public Player getOpponent(Player player)

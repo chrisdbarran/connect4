@@ -3,7 +3,9 @@ package com.game.connect4;
 import java.io.File;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.util.StringUtils;
@@ -29,8 +31,15 @@ public class Connect4 {
 			Game game = setupGame();
 			do {
 				out.print(BoardPrinter.renderBoard(game.board()));
-				Integer move = getMove(game.board().getValidMoves(), game.who());
-				gameIsWon = game.hasWon(move);
+				out.println();
+				if(game.who().isHuman()) {
+					Integer move = getMove(game.board().getValidMoves(), game.who());
+					gameIsWon = game.hasWon(move);
+				} else {
+					Integer move = game.suggestMove(game.who());
+					gameIsWon = game.hasWon(move);
+				}
+				
 
 			} while (!gameIsWon);
 
@@ -41,25 +50,13 @@ public class Connect4 {
 	}
 
 	public Integer getMove(Collection<Integer> moves, Player player) {
-		
-		boolean validMove = false;
-		Integer move = new Integer(0);
+		String prompt = String.format("\n%s (player %d) take a move : ", player.getName(), player.getPlayerId().value);
+		return selectIntegerFromList(moves, prompt);
+	}
 
-		do {
-			out.printf("\n%s (player %d) take a move : ", player.getName(), player.getPlayerId().value);
-			String input = inputScanner.next();
-
-			try {
-				move = Integer.parseInt(input);
-				validMove = moves.contains(move);
-			} catch (NumberFormatException e)
-			{
-				validMove = false;
-			}
-
-		} while (!validMove);
-
-		return move;
+	public Integer getNumberOfPlayers(Collection<Integer> choices) {
+		String prompt = "Select number of players 0, 1 or 2 : ";
+		return selectIntegerFromList(choices, prompt);
 	}
 
 	public Game setupGame() throws Exception {
@@ -70,9 +67,28 @@ public class Connect4 {
 
 	public GameData getGameData() {
 		
-		Player player1 = getPlayer(1);
-		Player player2 = getPlayer(2);
+		final List<Integer> choices = Arrays.asList(0,1,2);
+		Integer numPlayers = getNumberOfPlayers(choices);
+		Player player1 = null;
+		Player player2 = null;
+
+		switch(numPlayers) {
+			case 1: player1 = getPlayer(1);
+					player2 = getComputerOpponent(2);
+					break;
+			case 2: player1 = getPlayer(1);
+					player2 = getPlayer(2);
+					break;
+			case 0: player1 = getComputerOpponent(1);
+					player2 = getComputerOpponent(2);
+					break;
+		}
 		return new GameData(player1, player2, new Board());
+	}
+
+	public Player getComputerOpponent(int playerId)
+	{
+		return new Player("Computer " + playerId, playerId, Player.PlayerType.COMPUTER);
 	}
 
 	public Player getPlayer(int playerId)
@@ -87,8 +103,26 @@ public class Connect4 {
 			name =  StringUtils.capitalize(inputScanner.next());
 
 		} while (name.isEmpty());
-		return new Player(name, playerId);
+		return new Player(name, playerId, Player.PlayerType.HUMAN);
 	} 
+
+	public Integer selectIntegerFromList(Collection<Integer> choices, String prompt) {
+		boolean validChoice = false;
+		Integer choice = null;
+		do {
+			out.print(prompt);
+
+			String input = inputScanner.next();
+			try {
+				choice = Integer.parseInt(input);
+				validChoice = choices.contains(choice);
+			} catch (NumberFormatException e)
+			{
+				validChoice = false;
+			}
+		} while(!validChoice);
+		return choice;
+	}
 
 	public boolean willPlay() {
 		out.print("Welcome to Connect4, shall we play a game y/N ?");

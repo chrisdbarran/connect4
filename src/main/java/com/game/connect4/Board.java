@@ -159,7 +159,6 @@ public class Board  {
     private boolean winningMove(Player player, int move) {
         Board futureBoard = new Board(this);
         futureBoard.makeMove(move, player);
-        System.out.println("Move: " + move + " Board: " + BoardPrinter.renderBoard(futureBoard));
         return futureBoard.hasWon(player);
     }
 
