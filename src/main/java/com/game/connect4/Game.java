@@ -86,4 +86,15 @@ public class Game {
         return player1();
     }
 
+    public boolean hasWon(Integer move)
+    {
+        Player player = who();
+        board().makeMove(move, player);
+        if(board().hasWon(player)) {
+            return true;
+        } 
+        who(getOpponent(player));
+        return false;
+    }
+
 }

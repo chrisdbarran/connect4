@@ -4,8 +4,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Collection;
-import java.util.Queue;
 import java.util.Scanner;
+
+import org.springframework.util.StringUtils;
 
 public class Connect4 {
 
@@ -24,54 +25,75 @@ public class Connect4 {
 	public void run() throws Exception {
 		if(willPlay())
 		{
+			boolean gameIsWon = false;
 			Game game = setupGame();
-
-			while(game.hasValidMoves())
-			{
+			do {
 				out.print(BoardPrinter.renderBoard(game.board()));
-				Player player = game.who();
-				Queue<Integer> moves = game.board().getValidMoves();
-				Integer move = getMove(moves, player);
-				game.board().makeMove(move, player);
-				if(game.board().hasWon(player)) {
-					printWinningMessage(player);
-					break;
-				} else {
-					//TODO should make move switch the player?
-					game.who(game.getOpponent(player));
-				}
-			}
+				Integer move = getMove(game.board().getValidMoves(), game.who());
+				gameIsWon = game.hasWon(move);
+
+			} while (!gameIsWon);
+
+			out.print(BoardPrinter.renderBoard(game.board()));
+			printWinningMessage(game.who());
 		}
 		
 	}
 
 	public Integer getMove(Collection<Integer> moves, Player player) {
-		out.printf("\n%s (player %d) take a move : ", player.getName(), player.getPlayerId().value);
-		return inputScanner.nextInt();
+		
+		boolean validMove = false;
+		Integer move = new Integer(0);
+
+		do {
+			out.printf("\n%s (player %d) take a move : ", player.getName(), player.getPlayerId().value);
+			String input = inputScanner.next();
+
+			try {
+				move = Integer.parseInt(input);
+				validMove = moves.contains(move);
+			} catch (NumberFormatException e)
+			{
+				validMove = false;
+			}
+
+		} while (!validMove);
+
+		return move;
 	}
 
 	public Game setupGame() throws Exception {
-		Game game = new Game(new File("/tmp/"), getPlayers());
+		Game game = new Game(new File("/tmp/"), getGameData());
 		game.saveGame("connect4.json");	
 		return game;	
 	}
 
-	public GameData getPlayers() {
-		out.print("Player 1 enter name: ");
-		Player player1 = Player.player1(inputScanner.next());
-		out.print("Player 2 enter name: ");
-		Player player2 = Player.player2(inputScanner.next());
+	public GameData getGameData() {
+		
+		Player player1 = getPlayer(1);
+		Player player2 = getPlayer(2);
 		return new GameData(player1, player2, new Board());
 	}
 
+	public Player getPlayer(int playerId)
+	{
+		String name = "";
+		do {
+			out.printf("Player %s enter name: ", playerId);
+			while(!inputScanner.hasNext()) {
+				out.print("Enter a valid name!");
+				inputScanner.next(); // Skip to next token
+			}
+			name =  StringUtils.capitalize(inputScanner.next());
+
+		} while (name.isEmpty());
+		return new Player(name, playerId);
+	} 
+
 	public boolean willPlay() {
-		printWelcomeMessage();
+		out.print("Welcome to Connect4, shall we play a game y/N ?");
 		String play = inputScanner.next();
 		return play.equals("y");
-	}
-
-	public void printWelcomeMessage() {
-		out.print("Welcome to Connect4, shall we play a game y/N ?");
 	}
 
 	public void printWinningMessage(Player player) {
