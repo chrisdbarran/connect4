@@ -41,11 +41,6 @@ public class Board  {
                     .forEach(c -> cells.add(new Cell(r,c)))); 
     }
 
-    public Board(List<Cell> cells)
-    {
-        this.cells = cells;
-    }
-
     public Board(int[][] boardAsArray)
     {
         this.cells = new ArrayList<Cell>();
@@ -107,13 +102,13 @@ public class Board  {
     boolean hasWonByDiagonalNorthEast(Player player)
     {
         Map<Integer,List<Cell>> cellMap = groupCellsByPlayer(player, (Cell cell) -> cell.getRow() + cell.getColumn());
-        return playerHasWinningSequence(cellMap, Cell::getRow) && playerHasWinningSequence(cellMap, (Cell cell) -> COLUMNS - cell.getColumn());
+        return playerHasWinningSequence(cellMap, Cell::getRow);
     }
 
     boolean hasWonByDiagonalSouthEast(Player player)
     {
         Map<Integer,List<Cell>> cellMap = groupCellsByPlayer(player, (Cell cell) -> cell.getRow() - cell.getColumn());
-        return playerHasWinningSequence(cellMap, Cell::getRow) && playerHasWinningSequence(cellMap, Cell::getColumn);
+        return playerHasWinningSequence(cellMap, Cell::getRow);
     }
 
     Map<Integer,List<Cell>> groupCellsByPlayer(Player player, Function<Cell,Integer> groupFunction) {

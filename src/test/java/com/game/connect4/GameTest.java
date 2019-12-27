@@ -1,7 +1,7 @@
 package com.game.connect4;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-//import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertLinesMatch;
@@ -9,7 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.platform.runner.JUnitPlatform;
@@ -121,6 +124,52 @@ public class GameTest extends BaseTest {
             () -> assertEquals(player2, game.getOpponent(player1)),
             () -> assertEquals(player1, game.getOpponent(player2))
         );
+    }
+
+    @Test
+    public void testGetWho() {
+        assertEquals(game.player1(), game.who());
+    }
+
+    @Test
+    public void testSetWho() {
+        Player player2 = game.player2();
+        game.who(player2);
+        assertEquals(player2, game.who());
+    }
+
+    @Test
+    public void testRandomValidMoveReturnsAValidMove() {
+        LinkedList<Integer> validMoves = new LinkedList<>();
+        validMoves.add(1);
+        validMoves.add(3);
+        validMoves.add(5);
+        validMoves.add(7);
+
+        IntStream.rangeClosed(1,10).forEach( i ->
+            assertTrue(validMoves.contains(game.randomValidMove(validMoves)))
+        );
+
+    }
+
+    @Test
+    public void testHasWonWithMove() {
+        Game game = setupGame(playerTwoWinNextMove());
+        game.who(game.player2());
+        assertTrue(game.hasWon(2));
+    }
+
+    @Test
+    public void testHasntWonWithMove() {
+        Game game = setupGame(playerTwoWinNextMove());
+        assertFalse(game.hasWon(2));
+    }
+
+    @Test
+    public void testIfNoOneCanWinSuggestValidMove() {
+        Queue<Integer> validMoves = game.board().getValidMoves();
+        Integer suggestedMove = game.suggestMove(game.player1());
+        assertTrue(validMoves.contains(suggestedMove));
     }
 
 }

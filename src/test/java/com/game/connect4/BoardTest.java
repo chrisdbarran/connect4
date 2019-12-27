@@ -123,8 +123,13 @@ public class BoardTest extends BaseTest {
 
     @Test
     public void testPlayerWonByDiagonalNorthEast() {
-        Board testBoard = playerOneDiagonalWinBoardNE();
-        assertTrue(testBoard.hasWonByDiagonalNorthEast(game.player1()));
+        assertAll(
+            () -> assertTrue(playerOneDiagonalWinBoardNE().hasWonByDiagonalNorthEast(game.player1())),
+            () -> assertFalse(this.playerOneRowWinBoard().hasWonByDiagonalNorthEast(game.player1())),
+            () -> assertFalse(this.playerOneColumnWinBoard().hasWonByDiagonalNorthEast(game.player1())),
+            () -> assertFalse(this.playerOneNoWinBoardNE().hasWonByDiagonalNorthEast(game.player1()))
+        );
+        
     }
 
     @Test
@@ -211,6 +216,17 @@ public class BoardTest extends BaseTest {
             {0,0,0,1,1,0,0},
             {0,0,0,1,2,0,0},
             {0,1,1,2,1,0,0},
+            {2,1,1,2,2,1,2}
+        });
+    }
+
+    private Board playerOneNoWinBoardNE() {
+        return new Board(new int[][] {
+            {0,0,0,2,0,0,0},
+            {0,0,0,1,0,0,0},
+            {0,0,0,1,1,0,0},
+            {0,0,0,1,2,0,0},
+            {0,1,2,2,1,0,0},
             {2,1,1,2,2,1,2}
         });
     }

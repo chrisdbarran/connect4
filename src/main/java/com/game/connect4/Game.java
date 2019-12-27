@@ -57,10 +57,6 @@ public class Game {
         return gameData.getPlayer2();
     }
 
-    public boolean hasValidMoves() {
-        return board().getValidMoves().size() > 0;
-    }
-
     public Integer suggestMove(Player player) {
         Queue<Integer> winningMoves = board().playerCanWinNextMove(player);
 
