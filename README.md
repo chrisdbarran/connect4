@@ -24,7 +24,8 @@ i.e.
 
 Then filter the collection to find all cells where empty cells then filter to find the column numbers.
 
-```
+```bash
+
 |1|2|3|4|5|6|7|
 +-+-+-+-+-+-+-+
 | | | | |O| | |

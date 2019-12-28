@@ -17,6 +17,7 @@ public class Connect4 {
 
     public Connect4(InputStream in, PrintStream out) {
         this.inputScanner = new Scanner(in);
+        inputScanner.useDelimiter("\\n");
         this.out = out;
     }
 
@@ -93,17 +94,24 @@ public class Connect4 {
     }
 
     public Player getPlayer(int playerId) {
-        String name = "";
+        boolean validChoice = false;
+        String choice = null;
         do {
             out.printf("Player %s enter name: ", playerId);
-            while (!inputScanner.hasNext()) {
-                out.print("Enter a valid name!");
-                inputScanner.next(); // Skip to next token
-            }
-            name = StringUtils.capitalize(inputScanner.next());
-
-        } while (name.isEmpty());
-        return new Player(name, playerId, Player.PlayerType.HUMAN);
+                if(inputScanner.hasNext("[\\w\\s]+"))
+                {
+                    String input = inputScanner.next("[\\w\\s]+");
+                    input = input.trim();
+                    if(!StringUtils.isEmpty(input)) {
+                        validChoice = true;
+                        choice = StringUtils.capitalize(input);
+                    }
+            
+                } else {
+                    inputScanner.nextLine();
+                }
+        } while(!validChoice);
+        return new Player(choice, playerId, Player.PlayerType.HUMAN);
     }
 
     public Integer selectIntegerFromList(Collection<Integer> choices, String prompt) {
