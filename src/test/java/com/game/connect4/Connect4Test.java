@@ -195,7 +195,7 @@ public class Connect4Test {
         verify(out, atLeastOnce()).print(eq("\nChris (player 1) take a move : "));
     } 
 
-    @Test
+    @Ignore
     public void testConnect4Main() throws Exception {
         String[] args = null;
         final InputStream originalIn = System.in;

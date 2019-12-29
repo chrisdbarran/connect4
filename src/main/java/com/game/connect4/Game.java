@@ -2,6 +2,8 @@ package com.game.connect4;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.Random;
@@ -16,10 +18,18 @@ public class Game {
     
     private File saveDir;
 
+    private final Random random;
+
     public Game(final File saveDir, GameData gameData)
     {
         this.saveDir = saveDir;
         this.gameData = gameData;
+        try {
+            random = SecureRandom.getInstanceStrong();
+        } catch (NoSuchAlgorithmException ex) 
+        {
+            throw new RuntimeException("Failed to instanciate random number generator.", ex);
+        }
     }
 
     public void saveGame(final String saveGameName) throws IOException {
@@ -76,7 +86,6 @@ public class Game {
     public Integer randomValidMove(Queue<Integer> validMoves) {
         Integer[] moves = new Integer[validMoves.size()];
         moves = validMoves.toArray(moves);
-        Random random = new Random();
         int choice = random.nextInt(moves.length - 1);
         return moves[choice];
     }
