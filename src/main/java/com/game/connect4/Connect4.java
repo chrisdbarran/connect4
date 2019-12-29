@@ -47,7 +47,7 @@ public class Connect4 {
                     gameIsWon = game.hasWon(move);
                 }
 
-            } while (!gameIsWon && game.board().getValidMoves().size() != 0);
+            } while (!gameIsWon && game.board().getValidMoves().isEmpty());
 
             out.print(BoardPrinter.renderBoard(game.board()));
 
@@ -62,7 +62,7 @@ public class Connect4 {
     }
 
     public Integer getMove(Collection<Integer> moves, Player player) {
-        String prompt = String.format("\n%s (player %d) take a move : ", player.getName(), player.getPlayerId().value);
+        String prompt = String.format("%n%s (player %d) take a move : ", player.getName(), player.getPlayerId().value);
         return selectIntegerFromList(moves, prompt);
     }
 
@@ -145,7 +145,7 @@ public class Connect4 {
     }
 
     public void printWinningMessage(Player player) {
-        out.printf("\nCongratulations %s, you have won the game.\n", player.getName());
+        out.printf("%nCongratulations %s, you have won the game.%n", player.getName());
     }
 
 }

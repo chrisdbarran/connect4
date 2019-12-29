@@ -51,8 +51,8 @@ public class Cell  {
        return state.toString();
     }
 
-    boolean isInLastColumn(int COLUMNS) {
-        return COLUMNS == this.column;
+    boolean isInLastColumn(int potentialLastColumn) {
+        return potentialLastColumn == this.column;
     }
 
 }

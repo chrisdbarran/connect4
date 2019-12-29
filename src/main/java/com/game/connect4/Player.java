@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Player {
 
-    public static enum PlayerType {HUMAN, COMPUTER};
+    public enum PlayerType {HUMAN, COMPUTER}
     private final String name;
     private final CellState playerId;
     private final PlayerType playerType;

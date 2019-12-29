@@ -29,6 +29,7 @@ public enum CellState {
         return CellState.EMPTY;
     }
 
+    @Override
     public String toString(){
         return this.token;
     }

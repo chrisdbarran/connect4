@@ -92,7 +92,7 @@ public class Connect4Test {
         Connect4 connect4 = new Connect4(in,out);
         Player player = Player.player1("Chris");
         connect4.printWinningMessage(player);
-        verify(out).printf("\nCongratulations %s, you have won the game.\n",player.getName());
+        verify(out).printf("%nCongratulations %s, you have won the game.%n",player.getName());
     }
 
     public boolean testWillPlayResponse(String input) {
@@ -177,7 +177,7 @@ public class Connect4Test {
         Connect4 connect4 = new Connect4(in,out);
         connect4.run();
         // Will it always win? probably not, will have to look at a draw.
-        verify(out).printf(eq("\nCongratulations %s, you have won the game.\n"),or(eq("Computer 1"), eq("Computer 2")));
+        verify(out).printf(eq("%nCongratulations %s, you have won the game.%n"),or(eq("Computer 1"), eq("Computer 2")));
     }
 
     @Test
@@ -206,7 +206,7 @@ public class Connect4Test {
         System.setIn(in);
         System.setOut(out);
         Connect4.main(args);
-        verify(out).printf(eq("\nCongratulations %s, you have won the game.\n"),or(eq("Computer 1"), eq("Computer 2")));
+        verify(out).printf(eq("%nCongratulations %s, you have won the game.%n"),or(eq("Computer 1"), eq("Computer 2")));
         System.setIn(originalIn);
         System.setOut(originalOut);
     }

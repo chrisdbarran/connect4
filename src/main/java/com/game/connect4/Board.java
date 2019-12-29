@@ -34,7 +34,7 @@ public class Board  {
     private List<Cell> cells;
 
     public Board() {
-        this.cells = new ArrayList<Cell>();
+        this.cells = new ArrayList<>();
         
         IntStream.rangeClosed(1, ROWS)
                 .forEach(r -> 
@@ -44,7 +44,7 @@ public class Board  {
 
     public Board(int[][] boardAsArray)
     {
-        this.cells = new ArrayList<Cell>();
+        this.cells = new ArrayList<>();
         IntStream.rangeClosed(1,ROWS)
                     .forEach(r -> 
                         IntStream.rangeClosed(1, COLUMNS)
@@ -53,25 +53,26 @@ public class Board  {
 
     public Board(Board original) {
         // Deep Copy of board
-        List<Cell> cells = new ArrayList<Cell>();
+        List<Cell> copiedCells = new ArrayList<>();
         for(Cell cell : original.getCells())
         {
-            cells.add(new Cell(cell));
+            copiedCells.add(new Cell(cell));
         }
-        this.cells = cells;
+        this.cells = copiedCells;
     }
 
 
     Queue<Integer> getValidMoves() {
        
-        Set<Integer> validMoves = new LinkedHashSet<Integer>();
-
-        cells.stream()
-                .filter(s -> s.isEmpty())
-                .peek(s -> validMoves.add(s.getColumn()))
-                .count(); // Terminal Operation.
-
-        return new LinkedList<Integer>(validMoves);
+        Set<Integer> validMoves = new LinkedHashSet<>();
+        cells.forEach(
+            (cell) -> {
+                if(cell.isEmpty()){
+                    validMoves.add(cell.getColumn());
+                }
+            }
+        );
+        return new LinkedList<>(validMoves);
     }
 
     void makeMove(int column, Player player) {
@@ -132,7 +133,7 @@ public class Board  {
     }
 
     static boolean groupContainsWinningSequence(List<Cell> cells, Function<Cell,Integer> compareFunction) {
-        StreamNeighbours<Integer> cellsQueue = new StreamNeighbours<Integer>(WINNING_RUN);
+        StreamNeighbours<Integer> cellsQueue = new StreamNeighbours<>(WINNING_RUN);
 
         return cells.stream().map(cell -> cellsQueue.addNext(compareFunction.apply(cell)))
                     .anyMatch(Board::areFourIntegersConsecutive);   
