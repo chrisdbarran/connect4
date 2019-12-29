@@ -15,6 +15,8 @@ public class Connect4 {
     final Scanner inputScanner;
     final PrintStream out;
 
+    private static final List<Integer> numberOfPlayersChoices = Arrays.asList(0,1,2);
+
     public Connect4(InputStream in, PrintStream out) {
         this.inputScanner = new Scanner(in);
         inputScanner.useDelimiter("\n");
@@ -29,7 +31,11 @@ public class Connect4 {
     public void run() throws Exception {
         if (willPlay()) {
             boolean gameIsWon = false;
-            Game game = setupGame();
+            Integer numberOfPlayers = getNumberOfPlayers(numberOfPlayersChoices);
+            GameData gameData = getGameData(numberOfPlayers);
+            Game game =  new Game(new File("/tmp/"), gameData);
+            game.saveGame("connect4.json");
+        
             do {
                 out.print(BoardPrinter.renderBoard(game.board()));
                 out.println();
@@ -59,20 +65,13 @@ public class Connect4 {
         return selectIntegerFromList(choices, prompt);
     }
 
-    public Game setupGame() throws Exception {
-        Game game = new Game(new File("/tmp/"), getGameData());
-        game.saveGame("connect4.json");
-        return game;
-    }
 
-    public GameData getGameData() {
+    public GameData getGameData(Integer numberOfPlayers) {
 
-        final List<Integer> choices = Arrays.asList(0, 1, 2);
-        Integer numPlayers = getNumberOfPlayers(choices);
         Player player1 = null;
         Player player2 = null;
 
-        switch (numPlayers) {
+        switch (numberOfPlayers) {
         case 1:
             player1 = getPlayer(1);
             player2 = getComputerOpponent(2);
@@ -85,6 +84,8 @@ public class Connect4 {
             player1 = getComputerOpponent(1);
             player2 = getComputerOpponent(2);
             break;
+        default:
+            throw new IllegalArgumentException("numberOfPlayers : " + numberOfPlayers + " is not a valid choice");
         }
         return new GameData(player1, player2, new Board());
     }

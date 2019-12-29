@@ -40,11 +40,5 @@ public class StreamNeighbours<T> {
     public T getLast() {
         return queue.getLast();
     }
-
-    public String toString()
-    {
-        return queue.toString();
-    }
-
 }
 
