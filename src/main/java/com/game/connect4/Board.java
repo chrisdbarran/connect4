@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 import java.util.function.Function;
@@ -74,12 +75,15 @@ public class Board  {
     }
 
     void makeMove(int column, Player player) {
-        Cell cell  = cells.stream()
+        Optional<Cell> cell  = cells.stream()
                             .filter(c -> c.getColumn() == column)
                             .filter(c -> c.isEmpty())
-                            .max(Comparator.comparing(Cell::getRow))
-                            .get();
-            cell.setState(player.getPlayerId());
+                            .max(Comparator.comparing(Cell::getRow));
+
+            if(cell.isPresent()) {
+                cell.get().setState(player.getPlayerId());
+            }
+            // cell will always be present, as only valid columns can be chosen.  
     }
 
     boolean hasWon(Player player)
