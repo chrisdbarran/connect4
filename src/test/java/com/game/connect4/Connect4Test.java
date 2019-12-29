@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -12,8 +11,6 @@ import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
 
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.runner.JUnitPlatform;
@@ -25,17 +22,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @RunWith(JUnitPlatform.class)
 public class Connect4Test {
 
-    private Connect4 connect4;
-
     @Mock
     private InputStream in;
     @Mock
     private PrintStream out;
-
-    @BeforeEach
-    public void setup() {
-        connect4 = new Connect4(in, out);
-    }
 
     @Test
     public void testGetNumberOfPlayers() throws Exception {

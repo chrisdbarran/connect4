@@ -17,7 +17,7 @@ public class Connect4 {
 
     public Connect4(InputStream in, PrintStream out) {
         this.inputScanner = new Scanner(in);
-        inputScanner.useDelimiter("\\n");
+        inputScanner.useDelimiter("\n");
         this.out = out;
     }
 
@@ -108,7 +108,7 @@ public class Connect4 {
                     }
             
                 } else {
-                    inputScanner.nextLine();
+                    inputScanner.next();
                 }
         } while(!validChoice);
         return new Player(choice, playerId, Player.PlayerType.HUMAN);
