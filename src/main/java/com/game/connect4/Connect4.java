@@ -47,10 +47,16 @@ public class Connect4 {
                     gameIsWon = game.hasWon(move);
                 }
 
-            } while (!gameIsWon);
+            } while (!gameIsWon && game.board().getValidMoves().size() != 0);
 
             out.print(BoardPrinter.renderBoard(game.board()));
-            printWinningMessage(game.who());
+
+            if(gameIsWon) {
+                printWinningMessage(game.who());
+            } else {
+                out.print("No more valid moves, game is a tie!");
+            }
+
         }
 
     }
