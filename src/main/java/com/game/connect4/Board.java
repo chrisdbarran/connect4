@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -66,7 +66,7 @@ public class Board  {
        
         Set<Integer> validMoves = new LinkedHashSet<>();
         cells.forEach(
-            (cell) -> {
+            cell -> {
                 if(cell.isEmpty()){
                     validMoves.add(cell.getColumn());
                 }
@@ -78,7 +78,7 @@ public class Board  {
     void makeMove(int column, Player player) {
         Optional<Cell> cell  = cells.stream()
                             .filter(c -> c.getColumn() == column)
-                            .filter(c -> c.isEmpty())
+                            .filter(Board::isCellEmpty)
                             .max(Comparator.comparing(Cell::getRow));
 
             if(cell.isPresent()) {
@@ -116,26 +116,23 @@ public class Board  {
         return playerHasWinningSequence(cellMap, Cell::getRow);
     }
 
-    Map<Integer,List<Cell>> groupCellsByPlayer(Player player, Function<Cell,Integer> groupFunction) {
-        
-    
-        Map<Integer,List<Cell>> cellMap = cells.stream()
+    Map<Integer,List<Cell>> groupCellsByPlayer(Player player, ToIntFunction<Cell> groupFunction) {
+        return cells.stream()
                .filter(c -> c.getState().equals(player.getPlayerId()))
-               .collect(Collectors.groupingBy(groupFunction::apply));
-        return cellMap;
+               .collect(Collectors.groupingBy(groupFunction::applyAsInt));
     }
 
-    boolean playerHasWinningSequence(Map<Integer,List<Cell>> cellMap, Function<Cell, Integer> compareFunction) {
+    boolean playerHasWinningSequence(Map<Integer,List<Cell>> cellMap, ToIntFunction<Cell> compareFunction) {
              return  cellMap.values().stream()
                     .filter(groupOfCells -> groupOfCells.size() >= WINNING_RUN)
                     .map(groupOfCells -> Board.groupContainsWinningSequence(groupOfCells, compareFunction))
                     .anyMatch(s -> s.equals(true));
     }
 
-    static boolean groupContainsWinningSequence(List<Cell> cells, Function<Cell,Integer> compareFunction) {
+    static boolean groupContainsWinningSequence(List<Cell> cells, ToIntFunction<Cell> compareFunction) {
         StreamNeighbours<Integer> cellsQueue = new StreamNeighbours<>(WINNING_RUN);
 
-        return cells.stream().map(cell -> cellsQueue.addNext(compareFunction.apply(cell)))
+        return cells.stream().map(cell -> cellsQueue.addNext(compareFunction.applyAsInt(cell)))
                     .anyMatch(Board::areFourIntegersConsecutive);   
     }
 
@@ -162,5 +159,9 @@ public class Board  {
         return futureBoard.hasWon(player);
     }
 
+    static boolean isCellEmpty(Cell cell) 
+    {
+        return cell.isEmpty();
+    }
 
 }

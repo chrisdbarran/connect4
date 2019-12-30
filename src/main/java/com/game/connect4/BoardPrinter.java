@@ -25,7 +25,7 @@ public class BoardPrinter {
 
     public static String renderBoard(Board board) {
         String rows = board.getCells().stream()
-                         .map(c -> BoardPrinter.renderCell(c))
+                         .map(BoardPrinter::renderCell)
                          .collect(Collectors.joining());
 
         return String.join(NEW_LINE, BoardPrinter.renderHeader(), rows);

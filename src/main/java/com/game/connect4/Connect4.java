@@ -1,8 +1,9 @@
 package com.game.connect4;
 
+import java.io.Console;
 import java.io.File;
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -13,32 +14,38 @@ import org.springframework.util.StringUtils;
 public class Connect4 {
 
     final Scanner inputScanner;
-    final PrintStream out;
+    final PrintWriter consoleWriter;
+    final File saveFolder;
 
     private static final List<Integer> numberOfPlayersChoices = Arrays.asList(0,1,2);
 
-    public Connect4(InputStream in, PrintStream out) {
-        this.inputScanner = new Scanner(in);
+    public Connect4(File saveFolder, Scanner inputScanner, PrintWriter consoleWriter) {
+        this.inputScanner = inputScanner;
         inputScanner.useDelimiter(System.lineSeparator());
-        this.out = out;
+        this.consoleWriter = consoleWriter;
+        this.saveFolder = saveFolder;
     }
 
-    public static void main(String[] args) throws Exception {
-        Connect4 connect4 = new Connect4(System.in, System.out);
+    public static void main(String[] args) throws IOException {
+        Console console = System.console();
+        Scanner inputScanner = new Scanner(System.in);
+
+        Connect4 connect4 = new Connect4(new File(args[0]), inputScanner, console.writer());
         connect4.run();
     }
 
-    public void run() throws Exception {
+    public void run() throws IOException {
         if (willPlay()) {
             boolean gameIsWon = false;
             Integer numberOfPlayers = getNumberOfPlayers(numberOfPlayersChoices);
             GameData gameData = getGameData(numberOfPlayers);
-            Game game =  new Game(new File("/tmp/"), gameData);
+            Game game =  new Game(saveFolder, gameData);
             game.saveGame("connect4.json");
         
             do {
-                out.print(BoardPrinter.renderBoard(game.board()));
-                out.println();
+                writeToConsole(BoardPrinter.renderBoard(game.board()));
+                writeToConsole(System.lineSeparator());
+
                 if (game.who().isHuman()) {
                     Integer move = getMove(game.board().getValidMoves(), game.who());
                     gameIsWon = game.hasWon(move);
@@ -47,18 +54,22 @@ public class Connect4 {
                     gameIsWon = game.hasWon(move);
                 }
 
-            } while (!gameIsWon && game.board().getValidMoves().isEmpty());
+            } while (gameNotWonAndThereAreValidMoves(gameIsWon, game));
 
-            out.print(BoardPrinter.renderBoard(game.board()));
+            writeToConsole(BoardPrinter.renderBoard(game.board()));
 
             if(gameIsWon) {
                 printWinningMessage(game.who());
             } else {
-                out.print("No more valid moves, game is a tie!");
+                writeToConsole("No more valid moves, game is a tie!");
             }
 
         }
 
+    }
+
+    public static boolean gameNotWonAndThereAreValidMoves(boolean gameIsWon, Game game) {
+        return !gameIsWon && !game.board().getValidMoves().isEmpty();
     }
 
     public Integer getMove(Collection<Integer> moves, Player player) {
@@ -104,7 +115,7 @@ public class Connect4 {
         boolean validChoice = false;
         String choice = null;
         do {
-            out.printf("Player %s enter name: ", playerId);
+            writeToConsole(String.format("Player %s enter name: ", playerId));
                 if(inputScanner.hasNext("[\\w\\s]+"))
                 {
                     String input = inputScanner.next("[\\w\\s]+");
@@ -125,7 +136,7 @@ public class Connect4 {
         boolean validChoice = false;
         Integer choice = null;
         do {
-            out.print(prompt);
+            writeToConsole(prompt);
 
             String input = inputScanner.next();
             try {
@@ -139,13 +150,18 @@ public class Connect4 {
     }
 
     public boolean willPlay() {
-        out.print("Welcome to Connect4, shall we play a game y/N ?");
+        writeToConsole("Welcome to Connect4, shall we play a game y/N ?");
         String play = inputScanner.next();
         return play.equals("y");
     }
 
     public void printWinningMessage(Player player) {
-        out.printf("%nCongratulations %s, you have won the game.%n", player.getName());
+        writeToConsole(String.format("%nCongratulations %s, you have won the game.%n", player.getName()));
+    }
+
+    public void writeToConsole(String content) {
+        consoleWriter.print(content);
+        consoleWriter.flush();
     }
 
 }
