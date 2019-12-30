@@ -187,7 +187,7 @@ public class Connect4Test {
         return connect4.getGameData(numberOfPlayers);
     }
 
-    @Disabled
+
     @Test
     public void testGameRuns() throws Exception {
         // No players will play itself.
@@ -199,7 +199,6 @@ public class Connect4Test {
         verify(out,atLeastOnce()).print(or(matches(case1),matches(case2)));
     }
 
-    @Disabled
     @Test
     public void testGameRunsButDecline() throws Exception {
         when(in.next()).thenReturn("N");
@@ -208,7 +207,6 @@ public class Connect4Test {
         verify(out,times(1)).print("Welcome to Connect4, shall we play a game y/N ?");
     }
 
-    @Disabled
     @Test
     public void testGameRunsWithHuman() throws Exception {
         String[] moves = {"1","1","2","3","4","5","6","7","1","2","3","4","5","6","7","1","2","3","4","5","6","7","1","2","3","4","5","6","7","1","2","3","4","5","6","7","1","2","3","4","5","6","7"};
