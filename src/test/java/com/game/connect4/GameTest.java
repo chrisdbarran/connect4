@@ -52,7 +52,6 @@ public class GameTest {
         assertEquals(emptyBoard, game.board());
     } 
 
-    @Disabled
     @Test
     void saveGameWritesGameToFile() throws Exception {
 
@@ -66,7 +65,7 @@ public class GameTest {
             () -> assertLinesMatch(testFile, Files.readAllLines(saveGame.toPath())));
     }
 
-    @Disabled
+
     @Test
     void loadGameReadsGameFromFile() throws Exception {
         
@@ -183,6 +182,7 @@ public class GameTest {
         assertFalse(game.hasWon(2));
     }
 
+    @Disabled
     @Test
     public void testIfNoOneCanWinSuggestValidMove() {
         Queue<Integer> validMoves = game.board().getValidMoves();
