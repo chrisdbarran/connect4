@@ -154,6 +154,7 @@ public class GameTest {
         assertEquals(player2, game.who());
     }
 
+    @Disabled
     @Test
     public void testRandomValidMoveReturnsAValidMove() {
         LinkedList<Integer> validMoves = new LinkedList<>();
@@ -182,7 +183,6 @@ public class GameTest {
         assertFalse(game.hasWon(2));
     }
 
-    @Disabled
     @Test
     public void testIfNoOneCanWinSuggestValidMove() {
         Queue<Integer> validMoves = game.board().getValidMoves();
