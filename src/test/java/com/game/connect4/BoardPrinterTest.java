@@ -1,11 +1,15 @@
 package com.game.connect4;
 
+
+import static com.game.connect4.TestConfig.copyTestFileToTempFolder;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 
 import java.io.PrintStream;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.runner.JUnitPlatform;
@@ -16,16 +20,24 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 @RunWith(JUnitPlatform.class)
-public class BoardPrinterTest extends BaseTest {
+public class BoardPrinterTest {
 
 
     private static String renderedBoard;
     private static String renderedEmptyBoard;
+    private static final String NEW_LINE = System.lineSeparator();
+
+    private Game game;
+
+    @BeforeEach
+    void setup() {
+        game = TestConfig.buildDefaultGame();
+    }
 
     @BeforeAll
     static void setupAll() throws Exception {
-        renderedBoard = loadTestFile("testRenderedBoard.txt");
-        renderedEmptyBoard = loadTestFile("testRenderedEmptyBoard.txt");
+        renderedBoard = TestConfig.loadTestFile("testRenderedBoard.txt");
+        renderedEmptyBoard = TestConfig.loadTestFile("testRenderedEmptyBoard.txt");
 
     }
 
@@ -47,7 +59,7 @@ public class BoardPrinterTest extends BaseTest {
 
     @Test
     void generateBoardHeader() {
-       String header =  "|1|2|3|4|5|6|7|\n+-+-+-+-+-+-+-+";
+       String header =  String.join(NEW_LINE, "|1|2|3|4|5|6|7|","+-+-+-+-+-+-+-+");
        assertEquals(header, BoardPrinter.renderHeader());
     }
     

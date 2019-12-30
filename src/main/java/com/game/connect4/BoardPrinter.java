@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 public class BoardPrinter {
 
-    private static final String NEW_LINE = "\n";
+    private static final String NEW_LINE = System.lineSeparator();
     private static final String BOARD_DELIMETER = "|";
 
     private PrintStream out;

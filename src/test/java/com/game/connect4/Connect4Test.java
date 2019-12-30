@@ -32,6 +32,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @RunWith(JUnitPlatform.class)
 public class Connect4Test {
 
+    private static final String NEW_LINE = System.lineSeparator();
+
     @Mock
     private InputStream in;
     @Mock
@@ -53,7 +55,8 @@ public class Connect4Test {
 
     @Test
     public void testGetNumberOfPlayersRetryForInvalidInput()  {
-        InputStream in = new ByteArrayInputStream("d\n1".getBytes());
+        String input = String.join(NEW_LINE,"d","1");
+        InputStream in = new ByteArrayInputStream(input.getBytes());
 
         Connect4 connect4 = new Connect4(in, out);
         final List<Integer> choices = Arrays.asList(0, 1, 2);
@@ -71,12 +74,14 @@ public class Connect4Test {
 
     @Test
     public void testGetPlayerNameWhiteSpaceInput() {
-        testGetPlayerInput("    \nchris",2);
+        String input = String.join(NEW_LINE,"     ","chris");
+        testGetPlayerInput(input,2);
     }
 
     @Test
     public void testGetPlayerNameNonWordInput() {
-        testGetPlayerInput("&*^&\nchris",2);
+        String input = String.join(NEW_LINE,"&*^&","chris");
+        testGetPlayerInput(input,2);
     }
 
     public void testGetPlayerInput(String input, int times) {
@@ -124,7 +129,7 @@ public class Connect4Test {
         final List<Integer> moves = Arrays.asList(1, 2, 3, 4, 5);
 
         assertEquals(1, connect4.getMove(moves, Player.player1("Chris")));
-        verify(out).print("\nChris (player 1) take a move : ");
+        verify(out).print(NEW_LINE + "Chris (player 1) take a move : ");
     }
 
     @Test
@@ -150,7 +155,8 @@ public class Connect4Test {
 
     @Test
     public void testGameDataTwoPlayersReturnsTwoHumanPlayers() {
-        InputStream in = new ByteArrayInputStream("chris\nbarran".getBytes());
+        String input = String.join(NEW_LINE, "chris","barran");
+        InputStream in = new ByteArrayInputStream(input.getBytes());
         GameData gameData = testGameData(2,in);
         assertAll(
             () -> assertEquals(PlayerType.HUMAN, gameData.getPlayer1().getPlayerType()),
@@ -173,7 +179,8 @@ public class Connect4Test {
     @Ignore
     public void testGameRuns() throws Exception {
         // No players will play itself.
-        InputStream in = new ByteArrayInputStream("y\n0".getBytes());
+        String input = String.join(NEW_LINE, "y","0");
+        InputStream in = new ByteArrayInputStream(input.getBytes());
         Connect4 connect4 = new Connect4(in,out);
         connect4.run();
         // Will it always win? probably not, will have to look at a draw.
@@ -189,10 +196,18 @@ public class Connect4Test {
 
     @Test
     public void testGameRunsWithHuman() throws Exception {
-        InputStream in = new ByteArrayInputStream("y\n1\nchris\n1\n2\n3\n4\n5\n6\n1\n2\n3\n4\n5\n6\n1\n2\n3\n4\n5\n6\n1\n2\n3\n4\n5\n6\n1\n2\n3\n4\n5\n6\n1\n2\n3\n4\n5\n6".getBytes());
+        String input = String.join(NEW_LINE, "y","1","chris");
+        String moves = "";
+        for(int i=1; i<7; i++){
+            moves = String.join(NEW_LINE,moves,"1","2","3","4","5","6","7");
+        }
+        input = String.join(NEW_LINE,input, moves);
+
+
+        InputStream in = new ByteArrayInputStream(input.getBytes());
         Connect4 connect4 = new Connect4(in,out);
         connect4.run();
-        verify(out, atLeastOnce()).print(eq("\nChris (player 1) take a move : "));
+        verify(out, atLeastOnce()).print(eq(NEW_LINE + "Chris (player 1) take a move : "));
     } 
 
     @Ignore
@@ -201,7 +216,8 @@ public class Connect4Test {
         final InputStream originalIn = System.in;
         final PrintStream originalOut = System.out;
         
-        InputStream in = new ByteArrayInputStream("y\n0".getBytes());
+        String input = String.join(NEW_LINE,"y","0");
+        InputStream in = new ByteArrayInputStream(input.getBytes());
 
         System.setIn(in);
         System.setOut(out);

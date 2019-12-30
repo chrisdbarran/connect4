@@ -19,7 +19,7 @@ public class Connect4 {
 
     public Connect4(InputStream in, PrintStream out) {
         this.inputScanner = new Scanner(in);
-        inputScanner.useDelimiter("\n");
+        inputScanner.useDelimiter(System.lineSeparator());
         this.out = out;
     }
 

@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import static com.game.connect4.TestConfig.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -13,12 +15,20 @@ import java.util.Queue;
 
 import com.game.connect4.stream.StreamNeighbours;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 
 @RunWith(JUnitPlatform.class)
-public class BoardTest extends BaseTest {
+public class BoardTest {
+
+    private Game game;
+
+    @BeforeEach
+    void setup() {
+        game = TestConfig.buildDefaultGame();
+    }
 
     @Test
     public void emptyBoardAnyMoveIsValid() {
