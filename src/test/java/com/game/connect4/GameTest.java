@@ -100,7 +100,6 @@ public class GameTest {
         assertEquals(3, game.suggestMove(game.player1()));
     }
 
-    @Disabled
     @Test
     public void suggestMoveBlockPlayerTwoWin()
     {
@@ -131,7 +130,7 @@ public class GameTest {
     }
 
 
-    @Disabled
+
     @Test
     public void testGetOpponent() {
         Player player1 = game.player1();
