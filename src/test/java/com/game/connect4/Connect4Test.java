@@ -115,14 +115,12 @@ public class Connect4Test {
         verify(out).print(NEW_LINE + "Congratulations Chris, you have won the game." + NEW_LINE);
     }
 
-    @Disabled
     public boolean testWillPlayResponse(String input) {
        when(in.next()).thenReturn(input);
         Connect4 connect4 = new Connect4(tmpDir, in, out);
         return connect4.willPlay();
     }
 
-    @Disabled
     @Test
     public void tetWontPlayResponse() {
         assertAll(
