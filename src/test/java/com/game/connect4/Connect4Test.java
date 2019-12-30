@@ -23,7 +23,6 @@ import java.util.Scanner;
 
 import com.game.connect4.Player.PlayerType;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
@@ -32,7 +31,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-//@Disabled("Disabled until I figure out why it doesnt work in AzureDevops")
 @ExtendWith(MockitoExtension.class)
 @RunWith(JUnitPlatform.class)
 public class Connect4Test {
