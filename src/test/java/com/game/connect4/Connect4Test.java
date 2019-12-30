@@ -48,7 +48,6 @@ public class Connect4Test {
     @TempDir
     File tmpDir;
 
-    @Disabled
     @Test
     public void testGetNumberOfPlayers() throws Exception {
         when(in.next()).thenReturn("1");
@@ -61,7 +60,6 @@ public class Connect4Test {
         
     }
 
-    @Disabled
     @Test
     public void testGetNumberOfPlayersRetryForInvalidInput()  {
         when(in.next()).thenReturn("d","1");
@@ -74,7 +72,6 @@ public class Connect4Test {
    
     }
 
-    @Disabled
     @Test
     public void testGetPlayerName() {
         when(in.hasNext("[\\w\\s]+")).thenReturn(true);
@@ -82,7 +79,6 @@ public class Connect4Test {
         testGetPlayerInput(1);
     }
 
-    @Disabled
     @Test
     public void testGetPlayerNameWhiteSpaceInput() {
         when(in.hasNext("[\\w\\s]+")).thenReturn(false,true);
@@ -91,7 +87,6 @@ public class Connect4Test {
         testGetPlayerInput(2);
     }
 
-    @Disabled
     @Test
     public void testGetPlayerNameNonWordInput() {
         when(in.hasNext("[\\w\\s]+")).thenReturn(false,true);
@@ -137,7 +132,6 @@ public class Connect4Test {
         assertEquals(PlayerType.COMPUTER, player.getPlayerType());
     }
 
-    @Disabled
     @Test
     public void testGetMove() {
         when(in.next()).thenReturn("1");
@@ -148,7 +142,6 @@ public class Connect4Test {
         verify(out).print(NEW_LINE + "Chris (player 1) take a move : ");
     }
 
-    @Disabled
     @Test
     public void testGameDataNoPlayersReturnsTwoComputerPlayers() {
 
@@ -159,7 +152,6 @@ public class Connect4Test {
         );
     }
 
-    @Disabled
     @Test
     public void testGameDataOnePlayerReturnsOneHumanAndOneComputerPlayer() {
         when(in.hasNext("[\\w\\s]+")).thenReturn(true);
@@ -172,7 +164,6 @@ public class Connect4Test {
         );
     }
 
-    @Disabled
     @Test
     public void testGameDataTwoPlayersReturnsTwoHumanPlayers() {
         when(in.hasNext(anyString())).thenReturn(true,true);
@@ -186,7 +177,6 @@ public class Connect4Test {
         );
     }
 
-    @Disabled
     @Test
     public void testGameDataOutOfRangeChoiceThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> { testGameData(4, in); } );
