@@ -142,13 +142,11 @@ public class GameTest {
         );
     }
 
-    @Disabled
     @Test
     public void testGetWho() {
         assertEquals(game.player1(), game.who());
     }
 
-    @Disabled
     @Test
     public void testSetWho() {
         Player player2 = game.player2();
