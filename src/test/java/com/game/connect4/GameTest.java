@@ -169,7 +169,6 @@ public class GameTest {
 
     }
 
-    @Disabled
     @Test
     public void testHasWonWithMove() {
         Game game = TestConfig.buildGameWithBoard(tmpDir, playerTwoWinNextMove());
@@ -177,7 +176,7 @@ public class GameTest {
         assertTrue(game.hasWon(2));
     }
 
-    @Disabled
+ 
     @Test
     public void testHasntWonWithMove() {
         Game game = TestConfig.buildGameWithBoard(tmpDir, playerTwoWinNextMove());
