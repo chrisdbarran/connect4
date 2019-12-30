@@ -15,7 +15,6 @@ import java.util.Queue;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.platform.runner.JUnitPlatform;
@@ -153,7 +152,6 @@ public class GameTest {
         assertEquals(player2, game.who());
     }
 
-    @Disabled
     @Test
     public void testRandomValidMoveReturnsAValidMove() {
         LinkedList<Integer> validMoves = new LinkedList<>();
@@ -182,7 +180,6 @@ public class GameTest {
         assertFalse(game.hasWon(2));
     }
 
-    @Disabled
     @Test
     public void testIfNoOneCanWinSuggestValidMove() {
         Queue<Integer> validMoves = game.board().getValidMoves();

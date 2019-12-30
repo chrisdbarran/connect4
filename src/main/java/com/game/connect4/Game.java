@@ -2,7 +2,6 @@ package com.game.connect4;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Optional;
 import java.util.Queue;
