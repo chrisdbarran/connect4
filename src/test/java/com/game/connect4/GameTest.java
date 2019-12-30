@@ -93,7 +93,6 @@ public class GameTest {
         });
     }
 
-    @Disabled
     @Test
     public void suggestMovePlayerOneWin()
     {
