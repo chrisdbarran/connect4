@@ -24,12 +24,9 @@ public class Game {
     {
         this.saveDir = saveDir;
         this.gameData = gameData;
-        try {
-            random = SecureRandom.getInstanceStrong();
-        } catch (NoSuchAlgorithmException ex) 
-        {
-            throw new RuntimeException("Failed to instanciate random number generator.", ex);
-        }
+        random = new SecureRandom();
+        byte[] bytes = new byte[20];
+        random.nextBytes(bytes);
     }
 
     public void saveGame(final String saveGameName) throws IOException {
