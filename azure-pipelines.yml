@@ -30,7 +30,7 @@ steps:
     codeCoverageToolOption: 'jaCoCo'
     mavenAuthenticateFeed: false
     effectivePomSkip: false
-    sonarQubeRunAnalysis: false
+    sonarQubeRunAnalysis: true
     sqMavenPluginVersionChoice: 'latest'
     goals: 'package'
 
