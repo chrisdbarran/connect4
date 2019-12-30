@@ -1,17 +1,18 @@
 package com.game.connect4;
 
-
 import static com.game.connect4.TestConfig.copyTestFileToTempFolder;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 
+import java.io.File;
 import java.io.PrintStream;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -29,9 +30,13 @@ public class BoardPrinterTest {
 
     private Game game;
 
+    @TempDir
+    File tmpDir;
+
+
     @BeforeEach
     void setup() {
-        game = TestConfig.buildDefaultGame();
+        game = TestConfig.buildDefaultGame(tmpDir);
     }
 
     @BeforeAll
@@ -44,7 +49,7 @@ public class BoardPrinterTest {
     @Test
     void printFormattedBoard(@Mock PrintStream out ) throws Exception {
         BoardPrinter printer = new BoardPrinter(out);
-        copyTestFileToTempFolder("testLoadGame.json");
+        copyTestFileToTempFolder(tmpDir,"testLoadGame.json");
         game.loadGame("testLoadGame.json");
         printer.printFormattedBoard(game.board());
         verify(out).print(renderedBoard);

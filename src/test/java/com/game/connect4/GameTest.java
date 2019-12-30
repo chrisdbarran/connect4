@@ -16,17 +16,21 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 
 @RunWith(JUnitPlatform.class)
 public class GameTest {
 
+    @TempDir
+    File tmpDir;
+
     Game game;
 
     @BeforeEach
     public void setup() {
-        game = TestConfig.buildDefaultGame();
+        game = TestConfig.buildDefaultGame(tmpDir);
     }
 
     @Test
@@ -50,7 +54,7 @@ public class GameTest {
     @Test
     void saveGameWritesGameToFile() throws Exception {
 
-        File saveGame = TestConfig.getTestSaveGame("gameData.json");
+        File saveGame = TestConfig.getTestSaveGame(tmpDir, "gameData.json");
         
         List<String> testFile = TestConfig.loadTestFileLines("testSaveGame.json");
         
@@ -63,7 +67,7 @@ public class GameTest {
     @Test
     void loadGameReadsGameFromFile() throws Exception {
         
-        TestConfig.copyTestFileToTempFolder("testLoadGame.json");
+        TestConfig.copyTestFileToTempFolder(tmpDir, "testLoadGame.json");
         
         game.loadGame("testLoadGame.json");
         
@@ -89,14 +93,14 @@ public class GameTest {
     @Test
     public void suggestMovePlayerOneWin()
     {
-        Game game = TestConfig.buildGameWithBoard(playerOneWinNextMove());
+        Game game = TestConfig.buildGameWithBoard(tmpDir, playerOneWinNextMove());
         assertEquals(3, game.suggestMove(game.player1()));
     }
 
     @Test
     public void suggestMoveBlockPlayerTwoWin()
     {
-        Game game = TestConfig.buildGameWithBoard(playerTwoWinNextMove());
+        Game game = TestConfig.buildGameWithBoard(tmpDir, playerTwoWinNextMove());
         assertEquals(2, game.suggestMove(game.player1()));
     }
 
@@ -162,14 +166,14 @@ public class GameTest {
 
     @Test
     public void testHasWonWithMove() {
-        Game game = TestConfig.buildGameWithBoard(playerTwoWinNextMove());
+        Game game = TestConfig.buildGameWithBoard(tmpDir, playerTwoWinNextMove());
         game.who(game.player2());
         assertTrue(game.hasWon(2));
     }
 
     @Test
     public void testHasntWonWithMove() {
-        Game game = TestConfig.buildGameWithBoard(playerTwoWinNextMove());
+        Game game = TestConfig.buildGameWithBoard(tmpDir, playerTwoWinNextMove());
         assertFalse(game.hasWon(2));
     }
 

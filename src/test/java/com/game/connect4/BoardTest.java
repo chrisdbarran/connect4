@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import static com.game.connect4.TestConfig.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -17,6 +18,7 @@ import com.game.connect4.stream.StreamNeighbours;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 
@@ -25,9 +27,12 @@ public class BoardTest {
 
     private Game game;
 
+    @TempDir
+    File tmpDir;
+
     @BeforeEach
     void setup() {
-        game = TestConfig.buildDefaultGame();
+        game = TestConfig.buildDefaultGame(tmpDir);
     }
 
     @Test
@@ -40,7 +45,7 @@ public class BoardTest {
 
     @Test
     public void fullBoardNoMovesAreValid() throws Exception {
-        copyTestFileToTempFolder("testFullBoard.json");
+        copyTestFileToTempFolder(tmpDir, "testFullBoard.json");
         game.loadGame("testFullBoard.json");
         assertTrue(game.board().getValidMoves().isEmpty());
     }

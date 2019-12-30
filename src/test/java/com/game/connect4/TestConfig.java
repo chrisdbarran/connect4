@@ -1,7 +1,5 @@
 package com.game.connect4;
 
-import org.junit.jupiter.api.io.TempDir;
-
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,23 +16,22 @@ public final class TestConfig {
 
     public static final Player PLAYER2 = Player.player2("player2");
 
-    @TempDir
-    static File saveDir;
 
-    static Game buildDefaultGame() {
+
+    static Game buildDefaultGame(File tmpDir) {
         GameData gameData = new GameData(PLAYER1, PLAYER2, new Board());
-        Game game = new Game(saveDir, gameData);
+        Game game = new Game(tmpDir, gameData);
         return game;
     }
 
-    static Game buildGameWithBoard(Board board) {
+    static Game buildGameWithBoard(File tmpDir, Board board) {
         GameData gameData = new GameData(PLAYER1, PLAYER2, board);
-        return new Game(saveDir, gameData);
+        return new Game(tmpDir, gameData);
     }
 
-    static void copyTestFileToTempFolder(String filename) throws Exception {
+    static void copyTestFileToTempFolder(File tmpDir, String filename) throws Exception {
         final Path original = Paths.get(SRC_TEST_RESOURCES + filename);
-        final File saveGame = new File(saveDir, filename);
+        final File saveGame = new File(tmpDir, filename);
         Path copied = saveGame.toPath();
         Files.copy(original, copied, StandardCopyOption.REPLACE_EXISTING);
     }
@@ -48,8 +45,8 @@ public final class TestConfig {
         return Files.readAllLines(Paths.get(SRC_TEST_RESOURCES + filename));
     }
 
-    static File getTestSaveGame(String filename) throws Exception {
-        return new File(saveDir,filename);
+    static File getTestSaveGame(File tmpDir, String filename) throws Exception {
+        return new File(tmpDir,filename);
     }
 
 }
