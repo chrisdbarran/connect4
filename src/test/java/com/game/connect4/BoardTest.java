@@ -14,6 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import com.game.connect4.persistence.FileRepository;
+import com.game.connect4.persistence.GameRepository;
 import com.game.connect4.stream.StreamNeighbours;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -27,12 +29,15 @@ public class BoardTest {
 
     private Game game;
 
+    private GameRepository gameRepository;
+
     @TempDir
     File tmpDir;
 
     @BeforeEach
     void setup() {
-        game = TestConfig.buildDefaultGame(tmpDir);
+        game = TestConfig.buildDefaultGame();
+        gameRepository = new FileRepository(tmpDir);
     }
 
     @Test
@@ -46,8 +51,8 @@ public class BoardTest {
     @Test
     public void fullBoardNoMovesAreValid() throws Exception {
         copyTestFileToTempFolder(tmpDir, "testFullBoard.json");
-        game.loadGame("testFullBoard.json");
-        assertTrue(game.board().getValidMoves().isEmpty());
+        GameData gameData = gameRepository.loadGame("testFullBoard.json");
+        assertTrue(gameData.getBoard().getValidMoves().isEmpty());
     }
 
     @Test

@@ -9,21 +9,26 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
+import com.game.connect4.persistence.FileRepository;
+import com.game.connect4.persistence.GameRepository;
+
 import org.springframework.util.StringUtils;
 
 public class Connect4 {
 
     final Scanner inputScanner;
     final PrintWriter consoleWriter;
-    final File saveFolder;
+    final GameRepository gameRepository;
+
 
     private static final List<Integer> numberOfPlayersChoices = Arrays.asList(0,1,2);
 
-    public Connect4(File saveFolder, Scanner inputScanner, PrintWriter consoleWriter) {
+    public Connect4(File saveDir, Scanner inputScanner, PrintWriter consoleWriter) {
         this.inputScanner = inputScanner;
         inputScanner.useDelimiter(System.lineSeparator());
         this.consoleWriter = consoleWriter;
-        this.saveFolder = saveFolder;
+        this.gameRepository = new FileRepository(saveDir);
+
     }
 
     public static void main(String[] args) throws IOException {
@@ -39,9 +44,9 @@ public class Connect4 {
             boolean gameIsWon = false;
             Integer numberOfPlayers = getNumberOfPlayers(numberOfPlayersChoices);
             GameData gameData = getGameData(numberOfPlayers);
-            Game game =  new Game(saveFolder, gameData);
-            game.saveGame("connect4.json");
-        
+            gameRepository.saveGame(gameData, "connect4.json");
+            Game game =  new Game(gameData);
+            
             do {
                 writeToConsole(BoardPrinter.renderBoard(game.board()));
                 writeToConsole(System.lineSeparator());

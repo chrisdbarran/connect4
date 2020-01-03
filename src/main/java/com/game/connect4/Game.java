@@ -1,46 +1,21 @@
 package com.game.connect4;
 
-import java.io.File;
-import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.Optional;
 import java.util.Queue;
 import java.util.Random;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 public class Game {
 
-    private static final String SAVE_GAME_FILENAME = "gameData.json";
-
     private GameData gameData;
-    
-    private File saveDir;
 
     private final Random random;
 
-    public Game(final File saveDir, GameData gameData)
+    public Game(GameData gameData)
     {
-        this.saveDir = saveDir;
         this.gameData = gameData;
         random = new SecureRandom();
         byte[] bytes = new byte[20];
         random.nextBytes(bytes);
-    }
-
-    public void saveGame(final String saveGameName) throws IOException {
-        final String filename = Optional.ofNullable(saveGameName).orElse(SAVE_GAME_FILENAME);
-        final File saveGame = new File(saveDir, filename);
-        final ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(saveGame, gameData);
-    }
-
-    public void loadGame(final String saveGameName) throws IOException {
-
-        final String filename = Optional.ofNullable(saveGameName).orElse(SAVE_GAME_FILENAME);
-        final File saveGame = new File(saveDir, filename);
-        final ObjectMapper objectMapper = new ObjectMapper();
-        gameData = objectMapper.readValue(saveGame, GameData.class);
     }
 
     public Player who() {

@@ -8,6 +8,9 @@ import static org.mockito.Mockito.verify;
 import java.io.File;
 import java.io.PrintStream;
 
+import com.game.connect4.persistence.FileRepository;
+import com.game.connect4.persistence.GameRepository;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,10 +36,13 @@ public class BoardPrinterTest {
     @TempDir
     File tmpDir;
 
+    private GameRepository gameRepository;
+
 
     @BeforeEach
     void setup() {
-        game = TestConfig.buildDefaultGame(tmpDir);
+        game = TestConfig.buildDefaultGame();
+        gameRepository = new FileRepository(tmpDir);
     }
 
     @BeforeAll
@@ -50,8 +56,9 @@ public class BoardPrinterTest {
     void printFormattedBoard(@Mock PrintStream out ) throws Exception {
         BoardPrinter printer = new BoardPrinter(out);
         copyTestFileToTempFolder(tmpDir,"testLoadGame.json");
-        game.loadGame("testLoadGame.json");
-        printer.printFormattedBoard(game.board());
+
+        GameData gameData = gameRepository.loadGame("testLoadGame.json");
+        printer.printFormattedBoard(gameData.getBoard());
         verify(out).print(renderedBoard);
     }
 

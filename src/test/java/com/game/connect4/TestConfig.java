@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
 
 
 public final class TestConfig {
@@ -16,20 +15,18 @@ public final class TestConfig {
 
     public static final Player PLAYER2 = Player.player2("player2");
 
-
-
-    static Game buildDefaultGame(File tmpDir) {
+    public static Game buildDefaultGame() {
         GameData gameData = new GameData(PLAYER1, PLAYER2, new Board());
-        Game game = new Game(tmpDir, gameData);
+        Game game = new Game(gameData);
         return game;
     }
 
-    static Game buildGameWithBoard(File tmpDir, Board board) {
+    public static Game buildGameWithBoard(Board board) {
         GameData gameData = new GameData(PLAYER1, PLAYER2, board);
-        return new Game(tmpDir, gameData);
+        return new Game(gameData);
     }
 
-    static void copyTestFileToTempFolder(File tmpDir, String filename) throws Exception {
+    public static void copyTestFileToTempFolder(File tmpDir, String filename) throws Exception {
         final Path original = Paths.get(SRC_TEST_RESOURCES + filename);
         final File saveGame = new File(tmpDir, filename);
         Path copied = saveGame.toPath();
@@ -37,15 +34,11 @@ public final class TestConfig {
     }
     
 
-    static String loadTestFile(String filename) throws Exception {
+    public static String loadTestFile(String filename) throws Exception {
         return new String(Files.readAllBytes(Paths.get(SRC_TEST_RESOURCES + filename)));
     }
 
-    static List<String> loadTestFileLines(String filename) throws Exception {
-        return Files.readAllLines(Paths.get(SRC_TEST_RESOURCES + filename));
-    }
-
-    static File getTestSaveGame(File tmpDir, String filename) throws Exception {
+    public static File getTestSaveGame(File tmpDir, String filename) throws Exception {
         return new File(tmpDir,filename);
     }
 
