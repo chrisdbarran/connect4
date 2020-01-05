@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 
 import com.game.connect4.Board;
-import com.game.connect4.GameData;
 import com.game.connect4.TestConfig;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -30,8 +29,8 @@ public class FileRepositoryTest {
     @Test
     void saveGameWritesGameToFile() throws Exception {
 
-        GameData gameData = new GameData(TestConfig.PLAYER1, TestConfig.PLAYER2, new Board());
-        gameRepository.saveGame(gameData,"gameData.json");
+        Board board = new Board(TestConfig.PLAYER1, TestConfig.PLAYER2);
+        gameRepository.saveGame(board,"gameData.json");
         
         File saveGame = TestConfig.getTestSaveGame(tmpDir, "gameData.json");
         
@@ -46,18 +45,18 @@ public class FileRepositoryTest {
         
         TestConfig.copyTestFileToTempFolder(tmpDir, "testLoadGame.json");
         
-        GameData gameData = gameRepository.loadGame("testLoadGame.json");
+        Board board = gameRepository.loadGame("testLoadGame.json");
         
         assertAll(
-            () -> assertEquals("Stefan",gameData.getPlayer1().getName()),
-            () -> assertEquals("Mary", gameData.getPlayer2().getName()),
-            () -> assertEquals(gameData.getPlayer2().getPlayerId(), gameData.getWho().getPlayerId()),
-            () -> assertEquals(testBoard().getCells(), gameData.getBoard().getCells()));
+            () -> assertEquals("Stefan",board.getPlayer1().getName()),
+            () -> assertEquals("Mary", board.getPlayer2().getName()),
+            () -> assertEquals(board.getPlayer2().getPlayerId(), board.getWho().getPlayerId()),
+            () -> assertEquals(testBoard().getCells(), board.getCells()));
     }
 
 
     private Board testBoard() {
-        return new Board(new int[][] {
+        return new Board(TestConfig.PLAYER1, TestConfig.PLAYER2,new int[][] {
             {0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0},

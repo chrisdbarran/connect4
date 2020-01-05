@@ -15,15 +15,12 @@ public final class TestConfig {
 
     public static final Player PLAYER2 = Player.player2("player2");
 
-    public static Game buildDefaultGame() {
-        GameData gameData = new GameData(PLAYER1, PLAYER2, new Board());
-        Game game = new Game(gameData);
-        return game;
+    public static Board buildDefaultBoard() {
+        return new Board(PLAYER1, PLAYER2);
     }
 
-    public static Game buildGameWithBoard(Board board) {
-        GameData gameData = new GameData(PLAYER1, PLAYER2, board);
-        return new Game(gameData);
+    public static Board buildBoardWithBoard(Board board) {
+        return new Board(board);
     }
 
     public static void copyTestFileToTempFolder(File tmpDir, String filename) throws Exception {
@@ -40,6 +37,51 @@ public final class TestConfig {
 
     public static File getTestSaveGame(File tmpDir, String filename) throws Exception {
         return new File(tmpDir,filename);
+    }
+
+    public static Board buildGameWithBoardPlayerOneWinNextMove() {
+        return playerOneWinNextMove();
+    }
+
+    private static Board playerOneWinNextMove() {
+        return new Board(TestConfig.PLAYER1, TestConfig.PLAYER2,new int[][] {
+            {0,0,0,2,0,0,0},
+            {0,0,0,1,0,0,0},
+            {0,0,0,1,1,0,0},
+            {0,0,2,1,2,0,0},
+            {0,1,2,2,1,0,0},
+            {2,1,1,2,2,1,2}
+        });
+    }
+
+    public static Board buildBoardWithPlayerTwoWinNextMove() {
+        return buildBoardWithBoard(playerTwoWinNextMove());
+    }
+
+    private static Board playerTwoWinNextMove() {
+        return new Board(TestConfig.PLAYER1, TestConfig.PLAYER2,new int[][] {
+            {0,0,0,2,0,0,0},
+            {0,0,0,1,0,0,0},
+            {0,0,0,1,1,0,0},
+            {0,2,2,1,2,0,0},
+            {0,1,2,2,1,0,0},
+            {2,1,1,1,2,2,2}
+        });
+    }
+
+    public static Board buildBoardWithBestMove() {
+        return buildBoardWithBoard(playerOneBestMove());
+    }
+
+    private static Board playerOneBestMove() {
+        return new Board(TestConfig.PLAYER1, TestConfig.PLAYER2,new int[][] {
+            {0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0},
+            {2,2,0,1,1,0,0}
+        });
     }
 
 }

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.game.connect4.GameData;
+import com.game.connect4.Board;
 
 public class FileRepository implements GameRepository {
 
@@ -18,20 +18,20 @@ public class FileRepository implements GameRepository {
     }
 
     @Override
-    public void saveGame(final GameData gameData, final String saveGameName) throws IOException {
+    public void saveGame(final Board board, final String saveGameName) throws IOException {
         final String filename = Optional.ofNullable(saveGameName).orElse(SAVE_GAME_FILENAME);
         final File saveGame = new File(saveDir, filename);
         final ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(saveGame, gameData);
+        objectMapper.writeValue(saveGame, board);
     }
 
     @Override
-    public GameData loadGame(final String saveGameName) throws IOException {
+    public Board loadGame(final String saveGameName) throws IOException {
 
         final String filename = Optional.ofNullable(saveGameName).orElse(SAVE_GAME_FILENAME);
         final File saveGame = new File(saveDir, filename);
         final ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(saveGame, GameData.class);
+        return objectMapper.readValue(saveGame, Board.class);
     }
 
 }

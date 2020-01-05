@@ -143,10 +143,10 @@ public class Connect4Test {
     @Test
     public void testGameDataNoPlayersReturnsTwoComputerPlayers() {
 
-        GameData gameData = testGameData(0, in);
+        Board board = testNewGame(0, in);
         assertAll(
-            () -> assertEquals(PlayerType.COMPUTER, gameData.getPlayer1().getPlayerType()),
-            () -> assertEquals(PlayerType.COMPUTER, gameData.getPlayer2().getPlayerType())
+            () -> assertEquals(PlayerType.COMPUTER, board.getPlayer1().getPlayerType()),
+            () -> assertEquals(PlayerType.COMPUTER, board.getPlayer2().getPlayerType())
         );
     }
 
@@ -154,11 +154,11 @@ public class Connect4Test {
     public void testGameDataOnePlayerReturnsOneHumanAndOneComputerPlayer() {
         when(in.hasNext("[\\w\\s]+")).thenReturn(true);
         when(in.next("[\\w\\s]+")).thenReturn("chris");
-        GameData gameData = testGameData(1,in);
+        Board board = testNewGame(1,in);
         assertAll(
-            () -> assertEquals(PlayerType.HUMAN, gameData.getPlayer1().getPlayerType()),
-            () -> assertEquals(PlayerType.COMPUTER, gameData.getPlayer2().getPlayerType()),
-            () -> assertEquals("Chris", gameData.getPlayer1().getName())
+            () -> assertEquals(PlayerType.HUMAN, board.getPlayer1().getPlayerType()),
+            () -> assertEquals(PlayerType.COMPUTER, board.getPlayer2().getPlayerType()),
+            () -> assertEquals("Chris", board.getPlayer1().getName())
         );
     }
 
@@ -166,23 +166,23 @@ public class Connect4Test {
     public void testGameDataTwoPlayersReturnsTwoHumanPlayers() {
         when(in.hasNext(anyString())).thenReturn(true,true);
         when(in.next(anyString())).thenReturn("chris","barran");
-        GameData gameData = testGameData(2,in);
+        Board board = testNewGame(2,in);
         assertAll(
-            () -> assertEquals(PlayerType.HUMAN, gameData.getPlayer1().getPlayerType()),
-            () -> assertEquals(PlayerType.HUMAN, gameData.getPlayer2().getPlayerType()),
-            () -> assertEquals("Chris", gameData.getPlayer1().getName()),
-            () -> assertEquals("Barran", gameData.getPlayer2().getName())
+            () -> assertEquals(PlayerType.HUMAN, board.getPlayer1().getPlayerType()),
+            () -> assertEquals(PlayerType.HUMAN, board.getPlayer2().getPlayerType()),
+            () -> assertEquals("Chris", board.getPlayer1().getName()),
+            () -> assertEquals("Barran", board.getPlayer2().getName())
         );
     }
 
     @Test
     public void testGameDataOutOfRangeChoiceThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> { testGameData(4, in); } );
+        assertThrows(IllegalArgumentException.class, () -> { testNewGame(4, in); } );
     }
 
-    public GameData testGameData(Integer numberOfPlayers, Scanner in) {
+    public Board testNewGame(Integer numberOfPlayers, Scanner in) {
         Connect4 connect4 = new Connect4(tmpDir, in,out);
-        return connect4.getGameData(numberOfPlayers);
+        return connect4.newGame(numberOfPlayers);
     }
 
 

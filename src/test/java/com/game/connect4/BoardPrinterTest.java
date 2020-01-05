@@ -31,8 +31,6 @@ public class BoardPrinterTest {
     private static String renderedEmptyBoard;
     private static final String NEW_LINE = System.lineSeparator();
 
-    private Game game;
-
     @TempDir
     File tmpDir;
 
@@ -41,7 +39,6 @@ public class BoardPrinterTest {
 
     @BeforeEach
     void setup() {
-        game = TestConfig.buildDefaultGame();
         gameRepository = new FileRepository(tmpDir);
     }
 
@@ -57,15 +54,15 @@ public class BoardPrinterTest {
         BoardPrinter printer = new BoardPrinter(out);
         copyTestFileToTempFolder(tmpDir,"testLoadGame.json");
 
-        GameData gameData = gameRepository.loadGame("testLoadGame.json");
-        printer.printFormattedBoard(gameData.getBoard());
+        Board board = gameRepository.loadGame("testLoadGame.json");
+        printer.printFormattedBoard(board);
         verify(out).print(renderedBoard);
     }
 
     @Test
     void printFormattedEmptyBoard(@Mock PrintStream out ) {
         BoardPrinter printer = new BoardPrinter(out);
-        printer.printFormattedBoard(game.board());
+        printer.printFormattedBoard(TestConfig.buildDefaultBoard());
         verify(out).print(renderedEmptyBoard);
     }
 

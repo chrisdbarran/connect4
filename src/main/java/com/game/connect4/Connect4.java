@@ -43,28 +43,27 @@ public class Connect4 {
         if (willPlay()) {
             boolean gameIsWon = false;
             Integer numberOfPlayers = getNumberOfPlayers(numberOfPlayersChoices);
-            GameData gameData = getGameData(numberOfPlayers);
-            gameRepository.saveGame(gameData, "connect4.json");
-            Game game =  new Game(gameData);
+            Board board = newGame(numberOfPlayers);
+            gameRepository.saveGame(board, "connect4.json");
             
             do {
-                writeToConsole(BoardPrinter.renderBoard(game.board()));
+                writeToConsole(BoardPrinter.renderBoard(board));
                 writeToConsole(System.lineSeparator());
 
-                if (game.who().isHuman()) {
-                    Integer move = getMove(game.board().getValidMoves(), game.who());
-                    gameIsWon = game.hasWon(move);
+                if (board.who().isHuman()) {
+                    Integer move = getMove(board.getValidMoves(), board.who());
+                    gameIsWon = board.hasWon(move);
                 } else {
-                    Integer move = game.suggestMove(game.who());
-                    gameIsWon = game.hasWon(move);
+                    Integer move = board.suggestMove(board.who());
+                    gameIsWon = board.hasWon(move);
                 }
 
-            } while (gameNotWonAndThereAreValidMoves(gameIsWon, game));
+            } while (gameNotWonAndThereAreValidMoves(gameIsWon, board));
 
-            writeToConsole(BoardPrinter.renderBoard(game.board()));
+            writeToConsole(BoardPrinter.renderBoard(board));
 
             if(gameIsWon) {
-                printWinningMessage(game.who());
+                printWinningMessage(board.who());
             } else {
                 writeToConsole("No more valid moves, game is a tie!");
             }
@@ -73,8 +72,8 @@ public class Connect4 {
 
     }
 
-    public static boolean gameNotWonAndThereAreValidMoves(boolean gameIsWon, Game game) {
-        return !gameIsWon && !game.board().getValidMoves().isEmpty();
+    public static boolean gameNotWonAndThereAreValidMoves(boolean gameIsWon, Board board) {
+        return !gameIsWon && !board.getValidMoves().isEmpty();
     }
 
     public Integer getMove(Collection<Integer> moves, Player player) {
@@ -88,7 +87,7 @@ public class Connect4 {
     }
 
 
-    public GameData getGameData(Integer numberOfPlayers) {
+    public Board newGame(Integer numberOfPlayers) {
 
         Player player1 = null;
         Player player2 = null;
@@ -109,7 +108,7 @@ public class Connect4 {
         default:
             throw new IllegalArgumentException("numberOfPlayers : " + numberOfPlayers + " is not a valid choice");
         }
-        return new GameData(player1, player2, new Board());
+        return new Board(player1, player2);
     }
 
     public Player getComputerOpponent(int playerId) {
