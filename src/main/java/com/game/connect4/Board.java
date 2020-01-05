@@ -91,11 +91,6 @@ public class Board  {
         this.cells = copiedCells;
     }
 
-    public Player who() {
-        return this.who;
-    }
-
-
     Queue<Integer> getValidMoves() {
        
         Set<Integer> validMoves = new LinkedHashSet<>();

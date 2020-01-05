@@ -50,11 +50,11 @@ public class Connect4 {
                 writeToConsole(BoardPrinter.renderBoard(board));
                 writeToConsole(System.lineSeparator());
 
-                if (board.who().isHuman()) {
-                    Integer move = getMove(board.getValidMoves(), board.who());
+                if (board.getWho().isHuman()) {
+                    Integer move = getMove(board.getValidMoves(), board.getWho());
                     gameIsWon = board.hasWon(move);
                 } else {
-                    Integer move = board.suggestMove(board.who());
+                    Integer move = board.suggestMove(board.getWho());
                     gameIsWon = board.hasWon(move);
                 }
 
@@ -63,7 +63,7 @@ public class Connect4 {
             writeToConsole(BoardPrinter.renderBoard(board));
 
             if(gameIsWon) {
-                printWinningMessage(board.who());
+                printWinningMessage(board.getWho());
             } else {
                 writeToConsole("No more valid moves, game is a tie!");
             }

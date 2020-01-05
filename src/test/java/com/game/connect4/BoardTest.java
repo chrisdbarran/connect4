@@ -299,7 +299,7 @@ public class BoardTest {
 
     @Test
     public void testGetWho() {
-        assertEquals(board.getPlayer1(), board.who());
+        assertEquals(board.getPlayer1(), board.getWho());
     }
 
     @Test
