@@ -29,6 +29,12 @@ import lombok.Setter;
 
 public class Board  {
 
+    private static final int MAXIMISING = 1;
+
+    private static final int MINIMISING = -1;
+
+    private static final int TIE_SCORE = 0;
+
     static final int ROWS = 6;
 
     static final int COLUMNS = 7;
@@ -235,7 +241,7 @@ public class Board  {
                     nextBoard.makeMove(move, player);
     
                     if(nextBoard.hasWon(player)) {
-                        return maximising ? 1 : -1;
+                        return MAXIMISING;
                     }
             
                     int score = nextBoard.minimax(this.getOpponent(player), !maximising, depth - 1);
@@ -255,7 +261,7 @@ public class Board  {
                     nextBoard.makeMove(move, player);
     
                     if(nextBoard.hasWon(player)) {
-                        return maximising ? 1 : -1;
+                        return MINIMISING;
                     }
             
                     int score = nextBoard.minimax(this.getOpponent(player), !maximising, depth - 1);
@@ -269,7 +275,7 @@ public class Board  {
             
         } 
         // There are no valid moves return tie
-        return 0;
+        return TIE_SCORE;
     }
 
     public Player getOpponent(Player player)
