@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -28,6 +29,10 @@ import lombok.Setter;
 @EqualsAndHashCode
 
 public class Board  {
+
+    private static final int INITIAL_MINIMISING_SCORE = 2;
+
+    private static final int INITIAL_MAXIMISING_SCORE = -2;
 
     private static final int MAXIMISING = 1;
 
@@ -203,7 +208,7 @@ public class Board  {
 
     public int getBestMove(Player player) {
         
-        int bestScore = -2;
+        int bestScore = INITIAL_MAXIMISING_SCORE;
         int bestMove = 0;
         int depth = 5;
 
@@ -229,53 +234,34 @@ public class Board  {
 
     public int minimax(Player player, boolean maximising, int depth) {
 
-        if(depth > 0)
-        {
+        if(depth == 0) {
+            return TIE_SCORE;
+        }
 
-            if(maximising) {
-                int bestScore = -2;
+        BiFunction<Integer,Integer,Integer> minMaxFunc;
+        int bestScore;
 
-                // if there are valid moves
-                for(Integer move : this.getValidMoves()) {
-                    Board nextBoard = new Board(this);
-                    nextBoard.makeMove(move, player);
-    
-                    if(nextBoard.hasWon(player)) {
-                        return MAXIMISING;
-                    }
-            
-                    int score = nextBoard.minimax(this.getOpponent(player), !maximising, depth - 1);
-                    if(score > bestScore) {
-                        bestScore = score;
-                    }
-                }
+        if(maximising) {
+            minMaxFunc = Math::max;
+            bestScore = INITIAL_MAXIMISING_SCORE;
+        } else {
+            minMaxFunc = Math::min;
+            bestScore = INITIAL_MINIMISING_SCORE;
+        }
+        
+        for(Integer move : this.getValidMoves()) {
+            Board nextBoard = new Board(this);
+            nextBoard.makeMove(move, player);
 
-                return bestScore;
-            
-            } else {
-                int bestScore = 2;
-
-                // if there are valid moves
-                for(Integer move : this.getValidMoves()) {
-                    Board nextBoard = new Board(this);
-                    nextBoard.makeMove(move, player);
-    
-                    if(nextBoard.hasWon(player)) {
-                        return MINIMISING;
-                    }
-            
-                    int score = nextBoard.minimax(this.getOpponent(player), !maximising, depth - 1);
-                    if(score < bestScore) {
-                        bestScore = score;
-                    }
-                }
-
-                return bestScore;
+            if(nextBoard.hasWon(player)) {
+                return maximising ? MAXIMISING : MINIMISING;
             }
-            
-        } 
-        // There are no valid moves return tie
-        return TIE_SCORE;
+    
+            int score = nextBoard.minimax(this.getOpponent(player), !maximising, depth - 1);
+            bestScore = minMaxFunc.apply(score, bestScore);
+        }
+
+        return bestScore;
     }
 
     public Player getOpponent(Player player)
