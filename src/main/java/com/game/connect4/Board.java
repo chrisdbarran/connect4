@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -212,7 +212,7 @@ public class Board  {
         int bestMove = 0;
         int depth = 5;
 
-        Map<Integer,Integer> scores = new HashMap<Integer,Integer>();
+        Map<Integer,Integer> scores = new HashMap<>();
 
         for(Integer move : this.getValidMoves()) {
             Board nextBoard = new Board(this);
@@ -238,7 +238,7 @@ public class Board  {
             return TIE_SCORE;
         }
 
-        BiFunction<Integer,Integer,Integer> minMaxFunc;
+        BinaryOperator<Integer> minMaxFunc;
         int bestScore;
 
         if(maximising) {
@@ -248,7 +248,7 @@ public class Board  {
             minMaxFunc = Math::min;
             bestScore = INITIAL_MINIMISING_SCORE;
         }
-        
+
         for(Integer move : this.getValidMoves()) {
             Board nextBoard = new Board(this);
             nextBoard.makeMove(move, player);
