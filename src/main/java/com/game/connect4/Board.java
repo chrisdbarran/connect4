@@ -14,6 +14,7 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.BinaryOperator;
+import java.util.function.IntBinaryOperator;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -238,7 +239,7 @@ public class Board  {
             return TIE_SCORE;
         }
 
-        BinaryOperator<Integer> minMaxFunc;
+        IntBinaryOperator minMaxFunc;
         int bestScore;
 
         if(maximising) {
@@ -258,7 +259,7 @@ public class Board  {
             }
     
             int score = nextBoard.minimax(this.getOpponent(player), !maximising, depth - 1);
-            bestScore = minMaxFunc.apply(score, bestScore);
+            bestScore = minMaxFunc.applyAsInt(score, bestScore);
         }
 
         return bestScore;
