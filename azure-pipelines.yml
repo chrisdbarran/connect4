@@ -20,7 +20,7 @@ steps:
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m -Dsonar.coverage.jacoco.xmlReportPaths=site/jacoco/jacoco.xml'
+    mavenOptions: '-Xmx3072m -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml'
     mavenVersionOption: 'Default'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
