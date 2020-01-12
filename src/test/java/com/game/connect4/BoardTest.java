@@ -19,7 +19,6 @@ import com.game.connect4.persistence.FileRepository;
 import com.game.connect4.persistence.GameRepository;
 import com.game.connect4.stream.StreamNeighbours;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -279,11 +278,23 @@ public class BoardTest {
         System.out.println(BoardPrinter.renderBoard(board));
     }
 
-    @Disabled
+    @Test
+    public void bestMoveDetectsWinForPlayer1FirstMove() {
+        Board board = TestConfig.buildGameWithBoardPlayerOneWinNextMove();
+        assertEquals(3, board.getBestMove(board.getPlayer1()));
+    }
+
+    @Test
+    public void bestMoveBlockWinForPlayer2FirstMove() {
+        Board board = TestConfig.buildBoardWithPlayerTwoWinNextMove();
+        assertEquals(2, board.getBestMove(board.getPlayer1()));
+    }
+
+    //@Disabled
     @Test
     public void shouldSuggestBestMove() {
         Board board = TestConfig.buildBoardWithBestMove();
-        assertEquals(6, board.minimax(board.getPlayer1(), true));
+        assertEquals(3, board.getBestMove(board.getPlayer2()));
     }
 
     @Test

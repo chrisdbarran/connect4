@@ -2,7 +2,9 @@ package com.game.connect4;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -193,23 +195,79 @@ public class Board  {
         return cell.isEmpty();
     }
 
-    public int minimax(Player player, boolean maximising) {
-        // if there are valid moves
-        for(Integer move : this.getValidMoves()) {
-            
-            // Make a copy of the board
-            Board nextBoard = new Board(this);
-            // Make the move
-            nextBoard.makeMove(move, player);
-            if(this.hasWon(player)) {
-                return maximising ? 1 : -1;
-            }
-            return minimax(this.getOpponent(player), !maximising);
-        }
-  
-            
-            // if no-one wins call minimax() again
+    public int getBestMove(Player player) {
         
+        int bestScore = -2;
+        int bestMove = 0;
+        int depth = 5;
+
+        Map<Integer,Integer> scores = new HashMap<Integer,Integer>();
+
+        for(Integer move : this.getValidMoves()) {
+            Board nextBoard = new Board(this);
+            nextBoard.makeMove(move, player);
+            if(nextBoard.hasWon(player)){
+                return move;
+            }
+
+            int score = nextBoard.minimax(getOpponent(player), false, depth);
+            
+            if(score > bestScore) {
+                 bestScore = score;
+                 scores.put(move, bestScore);
+            }
+        }
+        bestMove = Collections.max(scores.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+        return bestMove;
+    }
+
+    public int minimax(Player player, boolean maximising, int depth) {
+
+        if(depth > 0)
+        {
+
+            if(maximising) {
+                int bestScore = -2;
+
+                // if there are valid moves
+                for(Integer move : this.getValidMoves()) {
+                    Board nextBoard = new Board(this);
+                    nextBoard.makeMove(move, player);
+    
+                    if(nextBoard.hasWon(player)) {
+                        return maximising ? 1 : -1;
+                    }
+            
+                    int score = nextBoard.minimax(this.getOpponent(player), !maximising, depth - 1);
+                    if(score > bestScore) {
+                        bestScore = score;
+                    }
+                }
+
+                return bestScore;
+            
+            } else {
+                int bestScore = 2;
+
+                // if there are valid moves
+                for(Integer move : this.getValidMoves()) {
+                    Board nextBoard = new Board(this);
+                    nextBoard.makeMove(move, player);
+    
+                    if(nextBoard.hasWon(player)) {
+                        return maximising ? 1 : -1;
+                    }
+            
+                    int score = nextBoard.minimax(this.getOpponent(player), !maximising, depth - 1);
+                    if(score < bestScore) {
+                        bestScore = score;
+                    }
+                }
+
+                return bestScore;
+            }
+            
+        } 
         // There are no valid moves return tie
         return 0;
     }

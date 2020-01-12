@@ -54,7 +54,8 @@ public class Connect4 {
                     Integer move = getMove(board.getValidMoves(), board.getWho());
                     gameIsWon = board.hasWon(move);
                 } else {
-                    Integer move = board.suggestMove(board.getWho());
+                    //Integer move = board.suggestMove(board.getWho());
+                    Integer move = board.getBestMove(board.getWho());
                     gameIsWon = board.hasWon(move);
                 }
 
